@@ -1,0 +1,80 @@
+.greyBackground {
+  background-color: #e5e5e5;
+}
+
+.chevronLeftStyling {
+  color: #7e98df;
+  height: 18.66px;
+}
+
+.hiddenDot {
+  visibility: hidden;
+}
+
+/* LOGIN */
+.logIn {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffffff;
+  margin-top: 70px;
+  width: 500px;
+  margin-bottom: 70px;
+  border-radius: 30px;
+}
+
+.logInHeader {
+  color: #7e98df;
+}
+
+.logInLink {
+  color: #ffffff;
+}
+
+.logInButton {
+  background-color: #7e98df;
+  border: 1px solid #7e98df;
+  border-radius: 70px;
+  height: 60px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.logInLink {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+/* LOGIN */
+
+/* LOGIN WITH GOOGLE */
+.logInWithGoogleButton {
+  border: 1px solid #7e98df;
+  background-color: transparent;
+  border-radius: 70px;
+  height: 60px;
+  cursor: pointer;
+}
+
+.logInWithGoogleLink {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #7e98df;
+}
+/* LOGIN WITH GOOGLE */
+
+.signUpLinkStyling {
+  color: #7e98df;
+}
+
+@media (max-width: 767.98px) {
+  .greyBackground {
+    background-color: #ffffff;
+  }
+
+  .logIn {
+    margin-top: 0%;
+    margin-bottom: 0%;
+  }
+}
