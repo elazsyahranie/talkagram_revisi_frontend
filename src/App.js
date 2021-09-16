@@ -33,8 +33,18 @@ function App() {
       <Router>
         <Switch>
           <PublicRoute path="/landing-page" exact component={LandingPage} />
-          <PublicRoute path="/login" exact component={Login} />
-          <PublicRoute path="/register" exact component={Register} />
+          <PublicRoute
+            path="/login"
+            restricted={true}
+            exact
+            component={Login}
+          />
+          <PublicRoute
+            path="/register"
+            restricted={true}
+            exact
+            component={Register}
+          />
           <PrivateRoute
             socket={socket}
             path="/chat-list"
