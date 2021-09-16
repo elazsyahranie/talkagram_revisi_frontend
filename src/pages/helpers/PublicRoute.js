@@ -12,7 +12,7 @@ const PublicRoute = ({ component: Component, restricted, ...rest }) => {
         // isAuthenticated = jika user sudah login (true)
         // restricted = jika user sudah login maka tidak masuk ke halaman tersebut (false)
         isAuthenticated && restricted ? (
-          <Redirect to="/landing-page" />
+          <Redirect to="/chat-list" />
         ) : (
           <Component {...props} />
         )
