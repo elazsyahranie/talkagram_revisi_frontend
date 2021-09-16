@@ -16,7 +16,6 @@ function Login(props) {
 
   const loginHandle = (event) => {
     event.preventDefault();
-    console.log(form);
     props
       .loginUser({ ...form })
       .then((res) => {
