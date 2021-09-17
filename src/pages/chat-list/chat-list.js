@@ -48,12 +48,6 @@ function ChatList(props) {
               <p>
                 <span className="fw-bold">The User:</span> Hi! How are you?
               </p>
-              <p>
-                <span className="fw-bold">The User:</span> Hi! How are you?
-              </p>
-              <p>
-                <span className="fw-bold">The User:</span> Hi! How are you?
-              </p>
             </div>
             <Form className={style.formChat}>
               <Form.Group>

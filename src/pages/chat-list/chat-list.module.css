@@ -9,4 +9,5 @@
 
 .chatMessagesContainer {
   height: 525px;
+  overflow: auto;
 }
