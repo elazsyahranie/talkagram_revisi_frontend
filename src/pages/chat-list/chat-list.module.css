@@ -1,4 +1,12 @@
+.wholeContainer,
+.wholeRow {
+  height: 100vh;
+}
+
 .chatRoomStyling {
   background-color: #fafafa;
-  height: 100vh;
+}
+
+.chatMessagesContainer {
+  height: 525px;
 }
