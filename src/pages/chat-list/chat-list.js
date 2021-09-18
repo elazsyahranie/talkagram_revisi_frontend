@@ -4,19 +4,20 @@ import style from "./chat-list.module.css";
 import { connect } from "react-redux";
 
 function ChatList(props) {
-  const [chatMessage, setChatMessage] = useState("");
-  const [chatMessages, setChatMessages] = useState("");
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     if (props.socket) {
       props.socket.on("chatMessage", (dataMessage) => {
-        setChatMessages({ ...chatMessage, dataMessage });
+        setMessages([...messages, dataMessage]);
       });
     }
-  }, [props.socket, chatMessages]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.socket, messages]);
 
   const handleChatMessage = (event) => {
-    setChatMessage(event.target.value);
+    setMessage(event.target.value);
   };
 
   const { user_name } = props.auth.data;
@@ -24,13 +25,12 @@ function ChatList(props) {
   const submitChatMessage = (event) => {
     if (event.keyCode === 13) {
       event.preventDefault();
-      console.log("Username:", user_name);
-      console.log("Send message:", chatMessage);
       const setData = {
         user_name,
-        chatMessage,
+        message,
       };
       props.socket.emit("globalMessage", setData);
+      setMessage("");
     }
   };
 
@@ -45,19 +45,21 @@ function ChatList(props) {
           <Col lg={9} md={9} sm={12} xs={12} className={style.chatRoomStyling}>
             <h5>Chat room!</h5>
             <div className={style.chatMessagesContainer}>
-              <p>
-                <span className="fw-bold">The User:</span> Hi! How are you?
-              </p>
+              {messages.map((item, index) => (
+                <p key={index}>
+                  <strong>{item.user_name}: </strong> {item.message}
+                </p>
+              ))}
             </div>
             <Form className={style.formChat}>
               <Form.Group>
                 <Form.Control
                   type="text"
                   className={style.formChatControl}
-                  value={chatMessage}
+                  value={message}
                   onChange={(event) => handleChatMessage(event)}
                   onKeyDown={(event) => submitChatMessage(event)}
-                ></Form.Control>
+                />
               </Form.Group>
             </Form>
           </Col>
