@@ -30,6 +30,8 @@ function ChatList(props) {
         message,
       };
       props.socket.emit("globalMessage", setData);
+      // props.socket.emit("privateMessage", setData);
+      // props.socket.emit("broadcastMessage", setData);
       setMessage("");
     }
   };
