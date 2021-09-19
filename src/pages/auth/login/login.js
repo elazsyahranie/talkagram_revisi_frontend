@@ -1,10 +1,11 @@
-import { Container, Row, Form, Button } from "react-bootstrap";
+import { Container, Row, Form, Button, Alert } from "react-bootstrap";
 import { useState } from "react";
 import style from "./login.module.css";
 import { loginUser } from "../../../redux/action/auth";
 import { connect } from "react-redux";
 
 function Login(props) {
+  const [errorMessage, setErrorMessage] = useState("");
   const [form, setForm] = useState({
     userEmail: "",
     userPassword: "",
@@ -12,6 +13,7 @@ function Login(props) {
 
   const handleForm = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
+    setErrorMessage("");
   };
 
   const loginHandle = (event) => {
@@ -20,11 +22,15 @@ function Login(props) {
       .loginUser({ ...form })
       .then((res) => {
         localStorage.setItem("token", res.value.data.data.token);
-        props.push.history("/chat-list");
+        props.history.push("/chat-list");
       })
       .catch((err) => {
-        console.log(err);
+        setErrorMessage(err.response.data.msg);
       });
+  };
+
+  const goToSignUp = () => {
+    props.history.push("/register");
   };
 
   return (
@@ -62,6 +68,11 @@ function Login(props) {
                     Submit
                   </Button>
                 </Form>
+                {errorMessage && (
+                  <div className="my-4">
+                    <Alert variant="danger">{errorMessage}</Alert>
+                  </div>
+                )}
                 <h6 className="my-4 text-end">Forgot Password</h6>
                 <h6 className="text-center my-4 fw-lighter">Login With</h6>
                 <div className={style.logInWithGoogleButton}>
@@ -71,7 +82,12 @@ function Login(props) {
                 </div>
                 <h6 className="my-4 text-center">
                   Dont't have an account?{" "}
-                  <span className={style.signUpLinkStyling}>Sign up!</span>
+                  <span
+                    className={style.signUpLinkStyling}
+                    onClick={() => goToSignUp()}
+                  >
+                    Sign up!
+                  </span>
                 </h6>
               </Container>
             </div>

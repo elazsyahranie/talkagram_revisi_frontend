@@ -1,4 +1,4 @@
-import { Container, Row, Form, Image, Button } from "react-bootstrap";
+import { Container, Row, Form, Image, Button, Alert } from "react-bootstrap";
 import { useState } from "react";
 import { registerUser } from "../../../redux/action/auth";
 import { connect } from "react-redux";
@@ -6,6 +6,7 @@ import style from "./register.module.css";
 import leftArrow from "../../components/back.png";
 
 function Register(props) {
+  const [errorMessage, setErrorMessage] = useState("");
   const [form, setForm] = useState({
     userName: "",
     userEmail: "",
@@ -14,6 +15,7 @@ function Register(props) {
 
   const handleForm = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
+    setErrorMessage("");
   };
 
   const registerHandle = (event) => {
@@ -25,8 +27,12 @@ function Register(props) {
         console.log(res);
       })
       .catch((err) => {
-        console.log(err);
+        setErrorMessage(err.response.data.msg);
       });
+  };
+
+  const goToLogIn = () => {
+    props.history.push("/login");
   };
 
   return (
@@ -37,7 +43,7 @@ function Register(props) {
             <div className={style.logIn}>
               <Container>
                 <div className="my-5 d-flex justify-content-between align-items-center">
-                  <Image src={leftArrow} alt="" />
+                  <Image src={leftArrow} alt="" onClick={() => goToLogIn()} />
                   <h4 className={`${style.logInHeader} my-auto`}>Register</h4>
                   <Image src={leftArrow} alt="" className={style.hiddenDot} />
                 </div>
@@ -76,16 +82,17 @@ function Register(props) {
                     Submit
                   </Button>
                 </Form>
+                {errorMessage && (
+                  <div className="my-4">
+                    <Alert variant="danger">{errorMessage}</Alert>
+                  </div>
+                )}
                 <h6 className="text-center my-4 fw-lighter">Register With</h6>
-                <div className={style.logInWithGoogleButton}>
+                <div className={`${style.logInWithGoogleButton} my-4`}>
                   <h6 className={`${style.logInWithGoogleLink} text-center`}>
                     Google
                   </h6>
                 </div>
-                <h6 className="my-4 text-center">
-                  Dont't have an account?{" "}
-                  <span className={style.signUpLinkStyling}>Sign up!</span>
-                </h6>
               </Container>
             </div>
           </Row>

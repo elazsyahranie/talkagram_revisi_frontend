@@ -1,4 +1,4 @@
-import { Container, Row, Col, Form } from "react-bootstrap";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
 import { connect } from "react-redux";
@@ -36,6 +36,11 @@ function ChatList(props) {
     }
   };
 
+  const handleLogOut = () => {
+    localStorage.clear();
+    props.history.push("/login");
+  };
+
   return (
     <>
       <Container fluid className={style.wholeContainer}>
@@ -43,6 +48,9 @@ function ChatList(props) {
           <Col lg={3} md={3} sm={12} xs={12}>
             <h5>{user_name}</h5>
             <h5>User Two</h5>
+            <Button variant="danger" onClick={() => handleLogOut()}>
+              Log Out
+            </Button>
           </Col>
           <Col lg={9} md={9} sm={12} xs={12} className={style.chatRoomStyling}>
             <h5>Chat room!</h5>
