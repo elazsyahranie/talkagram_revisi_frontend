@@ -48,7 +48,7 @@ function ChatList(props) {
       props.socket.emit("globalMessage", setData);
       // props.socket.emit("privateMessage", setData);
       // props.socket.emit("broadcastMessage", setData);
-      setMessage("");
+      setMessage(""); // Mmebuat form kosong kembali setelah mengirimkan pesan
     }
   };
 
@@ -81,7 +81,20 @@ function ChatList(props) {
                   </>
                 ))
               : null}
-            {noContacts && <h6>Add a friend to start chat</h6>}
+            {noContacts && (
+              <>
+                <div className="mb-3">
+                  <h6>Add a friend to start chat</h6>
+                </div>
+              </>
+            )}
+            <Form className={style.roomChatSelect}>
+              <Form.Control as="select">
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </Form.Control>
+            </Form>
           </Col>
           <Col lg={9} md={9} sm={12} xs={12} className={style.chatRoomStyling}>
             <h5>Chat room!</h5>
