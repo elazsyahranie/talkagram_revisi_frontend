@@ -8,6 +8,9 @@ function ChatList(props) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [contacts, setContacts] = useState([]);
+  const [noContacts, setNoContacts] = useState(false);
+
+  const { user_name, user_id } = props.auth.data;
 
   useEffect(() => {
     if (props.socket) {
@@ -15,16 +18,25 @@ function ChatList(props) {
         setMessages([...messages, dataMessage]);
       });
     }
+    getDataofContacts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.socket, messages]);
 
-  const { user_name, user_id } = props.auth.data;
+  const getDataofContacts = () => {
+    props
+      .getContacts(user_id)
+      .then((res) => {
+        setContacts(res.value.data.data);
+        setNoContacts(false);
+      })
+      .catch(() => {
+        setNoContacts(true);
+      });
+  };
 
   const handleChatMessage = (event) => {
     setMessage(event.target.value);
   };
-
-  console.log(props);
 
   const submitChatMessage = (event) => {
     if (event.keyCode === 13) {
@@ -45,6 +57,8 @@ function ChatList(props) {
     props.history.push("/login");
   };
 
+  console.log(contacts);
+
   return (
     <>
       <Container fluid className={style.wholeContainer}>
@@ -55,6 +69,19 @@ function ChatList(props) {
             <Button variant="danger" onClick={() => handleLogOut()}>
               Log Out
             </Button>
+            {contacts
+              ? contacts.map((item, index) => (
+                  <>
+                    <div className="mb-3">
+                      <h6 key={index}>{item.user_name}</h6>
+                      <small className="text-muted" key={index}>
+                        {item.user_email}
+                      </small>
+                    </div>
+                  </>
+                ))
+              : null}
+            {noContacts && <h6>Add a friend to start chat</h6>}
           </Col>
           <Col lg={9} md={9} sm={12} xs={12} className={style.chatRoomStyling}>
             <h5>Chat room!</h5>
