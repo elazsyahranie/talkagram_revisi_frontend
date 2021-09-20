@@ -1,11 +1,13 @@
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
+import { getContacts } from "../../redux/action/user";
 import { connect } from "react-redux";
 
 function ChatList(props) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
     if (props.socket) {
@@ -16,11 +18,13 @@ function ChatList(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.socket, messages]);
 
+  const { user_name, user_id } = props.auth.data;
+
   const handleChatMessage = (event) => {
     setMessage(event.target.value);
   };
 
-  const { user_name } = props.auth.data;
+  console.log(props);
 
   const submitChatMessage = (event) => {
     if (event.keyCode === 13) {
@@ -81,6 +85,8 @@ function ChatList(props) {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  user: state.user,
 });
+const mapDispatchToProps = { getContacts };
 
-export default connect(mapStateToProps, null)(ChatList);
+export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
