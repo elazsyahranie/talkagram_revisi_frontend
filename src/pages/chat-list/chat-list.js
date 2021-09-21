@@ -9,6 +9,7 @@ function ChatList(props) {
   const [messages, setMessages] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [noContacts, setNoContacts] = useState(false);
+  const [room, setRoom] = useState("");
 
   const { user_name, user_id } = props.auth.data;
 
@@ -38,16 +39,26 @@ function ChatList(props) {
     setMessage(event.target.value);
   };
 
+  const selectRoom = (event) => {
+    props.socket.emit("joinRoom", {
+      room: event.target.value,
+      user_name,
+    });
+    setRoom(event.target.value);
+  };
+
   const submitChatMessage = (event) => {
     if (event.keyCode === 13) {
       event.preventDefault();
       const setData = {
+        room,
         user_name,
         message,
       };
-      props.socket.emit("globalMessage", setData);
+      // props.socket.emit("globalMessage", setData);
       // props.socket.emit("privateMessage", setData);
       // props.socket.emit("broadcastMessage", setData);
+      props.socket.emit("roomMessage", setData);
       setMessage(""); // Mmebuat form kosong kembali setelah mengirimkan pesan
     }
   };
@@ -56,8 +67,6 @@ function ChatList(props) {
     localStorage.clear();
     props.history.push("/login");
   };
-
-  console.log(contacts);
 
   return (
     <>
@@ -72,11 +81,9 @@ function ChatList(props) {
             {contacts
               ? contacts.map((item, index) => (
                   <>
-                    <div className="mb-3">
-                      <h6 key={index}>{item.user_name}</h6>
-                      <small className="text-muted" key={index}>
-                        {item.user_email}
-                      </small>
+                    <div className="mb-3" key={index}>
+                      <h6>{item.user_name}</h6>
+                      <small className="text-muted">{item.user_email}</small>
                     </div>
                   </>
                 ))
@@ -89,10 +96,13 @@ function ChatList(props) {
               </>
             )}
             <Form className={style.roomChatSelect}>
-              <Form.Control as="select">
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+              <Form.Control as="select" onChange={(event) => selectRoom(event)}>
+                <option selected="selected" disabled hidden>
+                  Choose a room...
+                </option>
+                <option value="HTML">HTML</option>
+                <option value="CSS">CSS</option>
+                <option value="JavaScript">JavaScript</option>
               </Form.Control>
             </Form>
           </Col>
