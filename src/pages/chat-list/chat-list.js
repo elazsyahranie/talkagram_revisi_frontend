@@ -35,6 +35,10 @@ function ChatList(props) {
       });
   };
 
+  const switchChatRoom = () => {
+    setMessages([]);
+  };
+
   const handleChatMessage = (event) => {
     setMessage(event.target.value);
   };
@@ -82,7 +86,12 @@ function ChatList(props) {
             {contacts
               ? contacts.map((item, index) => (
                   <>
-                    <div className="mb-3" key={index}>
+                    <div
+                      className="mb-3"
+                      key={index}
+                      onClick={() => switchChatRoom()}
+                      style={{ cursor: "pointer" }}
+                    >
                       <h6>{item.user_name}</h6>
                       <small className="text-muted">{item.user_email}</small>
                     </div>
