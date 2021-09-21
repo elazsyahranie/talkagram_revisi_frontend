@@ -9,7 +9,7 @@ function ChatList(props) {
   const [messages, setMessages] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [noContacts, setNoContacts] = useState(false);
-  const [room, setRoom] = useState("");
+  const [room, setRoom] = useState({ new: "", previous: "" });
 
   const { user_name, user_id } = props.auth.data;
 
@@ -42,16 +42,17 @@ function ChatList(props) {
   const selectRoom = (event) => {
     props.socket.emit("joinRoom", {
       room: event.target.value,
+      previousRoom: room.previous,
       user_name,
     });
-    setRoom(event.target.value);
+    setRoom({ ...room, new: event.target.value, old: event.target.value });
   };
 
   const submitChatMessage = (event) => {
     if (event.keyCode === 13) {
       event.preventDefault();
       const setData = {
-        room,
+        room: room.new,
         user_name,
         message,
       };
