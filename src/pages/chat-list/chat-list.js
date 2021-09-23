@@ -89,7 +89,7 @@ function ChatList(props) {
                     <div
                       className="mb-3"
                       key={index}
-                      onClick={() => switchChatRoom()}
+                      onClick={() => switchChatRoom(item.user_id)}
                       style={{ cursor: "pointer" }}
                     >
                       <h6>{item.user_name}</h6>
