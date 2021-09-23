@@ -6,3 +6,10 @@ export const getRooms = (id) => {
     payload: axiosApiIntances.get(`user/get-room-list/${id}`),
   };
 };
+
+export const insertChat = (data) => {
+  return {
+    type: "INSERT_MESSAGE",
+    payload: axiosApiIntances.post("chat/insert-message", data),
+  };
+};

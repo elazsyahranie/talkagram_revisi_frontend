@@ -1,7 +1,7 @@
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
-import { getRooms } from "../../redux/action/user";
+import { getRooms, insertChat } from "../../redux/action/user";
 import { connect } from "react-redux";
 
 function ChatList(props) {
@@ -10,6 +10,7 @@ function ChatList(props) {
   const [rooms, setRooms] = useState([]);
   const [noRooms, setNoRooms] = useState(false);
   const [room, setRoom] = useState({ new: "", previous: "" });
+  const [receiver, setReceiver] = useState("");
 
   const { user_name, user_id } = props.auth.data;
 
@@ -39,14 +40,16 @@ function ChatList(props) {
     setMessage(event.target.value);
   };
 
-  const selectRoom = (user_id) => {
+  const selectRoom = (room_chat, user_id) => {
+    console.log(room_chat);
     console.log(user_id);
     props.socket.emit("joinRoom", {
-      room: user_id,
+      room: room_chat,
       previousRoom: room.previous,
       user_name,
     });
-    setRoom({ ...room, new: user_id, old: user_id });
+    setRoom({ ...room, new: room_chat, old: room_chat });
+    setReceiver(user_id);
   };
 
   const submitChatMessage = (event) => {
@@ -57,6 +60,20 @@ function ChatList(props) {
         user_name,
         message,
       };
+      const data = {
+        roomChat: room.new,
+        senderId: user_id,
+        receiverId: receiver,
+        chatMessage: message,
+      };
+      props
+        .insertChat(data)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       // props.socket.emit("globalMessage", setData);
       // props.socket.emit("privateMessage", setData);
       // props.socket.emit("broadcastMessage", setData);
@@ -88,7 +105,7 @@ function ChatList(props) {
                     <div
                       className="mb-3"
                       key={index}
-                      onClick={() => selectRoom(item.room_chat)}
+                      onClick={() => selectRoom(item.room_chat, item.user_id)}
                       style={{ cursor: "pointer" }}
                     >
                       <h5 className="mb-2">{item.user_name}</h5>
@@ -146,6 +163,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
   user: state.user,
 });
-const mapDispatchToProps = { getRooms };
+const mapDispatchToProps = { getRooms, insertChat };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
