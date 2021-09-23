@@ -1,14 +1,14 @@
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
-import { getContacts } from "../../redux/action/user";
+import { getRooms } from "../../redux/action/user";
 import { connect } from "react-redux";
 
 function ChatList(props) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [contacts, setContacts] = useState([]);
-  const [noContacts, setNoContacts] = useState(false);
+  const [rooms, setRooms] = useState([]);
+  const [noRooms, setNoRooms] = useState(false);
   const [room, setRoom] = useState({ new: "", previous: "" });
 
   const { user_name, user_id } = props.auth.data;
@@ -19,37 +19,34 @@ function ChatList(props) {
         setMessages([...messages, dataMessage]);
       });
     }
-    getDataofContacts();
+    getDataofRooms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.socket, messages]);
 
-  const getDataofContacts = () => {
+  const getDataofRooms = () => {
     props
-      .getContacts(user_id)
+      .getRooms(user_id)
       .then((res) => {
-        setContacts(res.value.data.data);
-        setNoContacts(false);
+        setRooms(res.value.data.data);
+        setNoRooms(false);
       })
       .catch(() => {
-        setNoContacts(true);
+        setNoRooms(true);
       });
-  };
-
-  const switchChatRoom = () => {
-    setMessages([]);
   };
 
   const handleChatMessage = (event) => {
     setMessage(event.target.value);
   };
 
-  const selectRoom = (event) => {
+  const selectRoom = (user_id) => {
+    console.log(user_id);
     props.socket.emit("joinRoom", {
-      room: event.target.value,
+      room: user_id,
       previousRoom: room.previous,
       user_name,
     });
-    setRoom({ ...room, new: event.target.value, old: event.target.value });
+    setRoom({ ...room, new: user_id, old: user_id });
   };
 
   const submitChatMessage = (event) => {
@@ -73,6 +70,8 @@ function ChatList(props) {
     props.history.push("/login");
   };
 
+  // console.log(rooms);
+
   return (
     <>
       <Container fluid className={style.wholeContainer}>
@@ -83,25 +82,25 @@ function ChatList(props) {
             <Button variant="danger" onClick={() => handleLogOut()}>
               Log Out
             </Button>
-            {contacts
-              ? contacts.map((item, index) => (
+            {rooms
+              ? rooms.map((item, index) => (
                   <>
                     <div
                       className="mb-3"
                       key={index}
-                      onClick={() => switchChatRoom(item.user_id)}
+                      onClick={() => selectRoom(item.room_chat)}
                       style={{ cursor: "pointer" }}
                     >
-                      <h6>{item.user_name}</h6>
-                      <small className="text-muted">{item.user_email}</small>
+                      <h5 className="mb-2">{item.user_name}</h5>
+                      <h6>{item.user_email}</h6>
                     </div>
                   </>
                 ))
               : null}
-            {noContacts && (
+            {noRooms && (
               <>
                 <div className="mb-3">
-                  <h6>Add a friend to start chat</h6>
+                  <h6>Go to menu and find friends to chat with!</h6>
                 </div>
               </>
             )}
@@ -147,6 +146,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
   user: state.user,
 });
-const mapDispatchToProps = { getContacts };
+const mapDispatchToProps = { getRooms };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);

@@ -8,14 +8,14 @@ const initialState = {
 
 const user = (state = initialState, action) => {
   switch (action.type) {
-    case "GET_CONTACTS_PENDING": // prosesnya sedang berjalan
+    case "GET_ROOMS_PENDING": // prosesnya sedang berjalan
       return {
         ...state,
         isLoading: true,
         isError: false,
         msg: "",
       };
-    case "GET_CONTACTS_FULFILLED": // ketika sukses
+    case "GET_ROOMS_FULFILLED": // ketika sukses
       return {
         ...state,
         isLoading: false,
@@ -23,7 +23,7 @@ const user = (state = initialState, action) => {
         data: action.payload.data.data,
         msg: action.payload.data.msg,
       };
-    case "GET_CONTACTS_REJECTED": // ketika gagal
+    case "GET_ROOMS_REJECTED": // ketika gagal
       return {
         ...state,
         isLoading: false,

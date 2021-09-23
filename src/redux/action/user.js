@@ -1,8 +1,8 @@
 import axiosApiIntances from "../../utils/axios";
 
-export const getContacts = (id) => {
+export const getRooms = (id) => {
   return {
-    type: "GET_CONTACTS",
-    payload: axiosApiIntances.get(`user/contacts/${id}`),
+    type: "GET_ROOMS",
+    payload: axiosApiIntances.get(`user/get-room-list/${id}`),
   };
 };
