@@ -21,6 +21,7 @@ function ChatList(props) {
       });
     }
     getDataofRooms();
+    // connect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.socket, messages]);
 
@@ -33,6 +34,11 @@ function ChatList(props) {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const connect = () => {
+    const userId = user_id;
+    props.socket.emit("connection-server", userId);
   };
 
   const getChatHistory = (room_chat) => {
