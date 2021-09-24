@@ -1,16 +1,16 @@
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
-import { getRooms, insertChat } from "../../redux/action/user";
+import { getRooms, insertChat, chatHistory } from "../../redux/action/user";
 import { connect } from "react-redux";
 
 function ChatList(props) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [rooms, setRooms] = useState([]);
-  const [noRooms, setNoRooms] = useState(false);
   const [room, setRoom] = useState({ new: "", previous: "" });
   const [receiver, setReceiver] = useState("");
+  const [chatHistory, setChatHistory] = useState([]);
 
   const { user_name, user_id } = props.auth.data;
 
@@ -29,10 +29,20 @@ function ChatList(props) {
       .getRooms(user_id)
       .then((res) => {
         setRooms(res.value.data.data);
-        setNoRooms(false);
       })
-      .catch(() => {
-        setNoRooms(true);
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getChatHistory = (room_chat) => {
+    props
+      .chatHistory(room_chat)
+      .then((res) => {
+        setChatHistory(res.value.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -50,6 +60,7 @@ function ChatList(props) {
     });
     setRoom({ ...room, new: room_chat, old: room_chat });
     setReceiver(user_id);
+    getChatHistory(room_chat);
   };
 
   const submitChatMessage = (event) => {
@@ -95,33 +106,31 @@ function ChatList(props) {
         <Row className={style.wholeRow}>
           <Col lg={3} md={3} sm={12} xs={12}>
             <h5>{user_name}</h5>
-            <h5>User Two</h5>
             <Button variant="danger" onClick={() => handleLogOut()}>
               Log Out
             </Button>
-            {rooms
-              ? rooms.map((item, index) => (
-                  <>
-                    <div
-                      className="mb-3"
-                      key={index}
-                      onClick={() => selectRoom(item.room_chat, item.user_id)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <h5 className="mb-2">{item.user_name}</h5>
-                      <h6>{item.user_email}</h6>
-                    </div>
-                  </>
-                ))
-              : null}
-            {noRooms && (
+            {rooms.length > 0 ? (
+              rooms.map((item, index) => (
+                <>
+                  <div
+                    className="mb-3"
+                    key={index}
+                    onClick={() => selectRoom(item.room_chat, item.user_id)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <h5 className="mb-2">{item.user_name}</h5>
+                    <h6>{item.user_email}</h6>
+                  </div>
+                </>
+              ))
+            ) : (
               <>
-                <div className="mb-3">
-                  <h6>Go to menu and find friends to chat with!</h6>
+                <div>
+                  <h6>Go to menu to find a friend to start chat with!</h6>
                 </div>
               </>
             )}
-            <Form className={style.roomChatSelect}>
+            {/* <Form className={style.roomChatSelect}>
               <Form.Control as="select" onChange={(event) => selectRoom(event)}>
                 <option selected="selected" disabled hidden>
                   Choose a room...
@@ -130,10 +139,21 @@ function ChatList(props) {
                 <option value="CSS">CSS</option>
                 <option value="JavaScript">JavaScript</option>
               </Form.Control>
-            </Form>
+            </Form> */}
           </Col>
           <Col lg={9} md={9} sm={12} xs={12} className={style.chatRoomStyling}>
             <h5>Chat room!</h5>
+            {chatHistory &&
+              chatHistory.map((item, index) => (
+                <>
+                  <div key={index}>
+                    <p>
+                      <strong>{item.user_name}: </strong>
+                      {item.message}
+                    </p>
+                  </div>
+                </>
+              ))}
             <div className={style.chatMessagesContainer}>
               {messages.map((item, index) => (
                 <p key={index}>
@@ -163,6 +183,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
   user: state.user,
 });
-const mapDispatchToProps = { getRooms, insertChat };
+const mapDispatchToProps = { getRooms, insertChat, chatHistory };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);

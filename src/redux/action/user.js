@@ -13,3 +13,10 @@ export const insertChat = (data) => {
     payload: axiosApiIntances.post("chat/insert-message", data),
   };
 };
+
+export const chatHistory = (data) => {
+  return {
+    type: "CHAT_HISTORY",
+    payload: axiosApiIntances.get(`chat/get-message/${data}`),
+  };
+};
