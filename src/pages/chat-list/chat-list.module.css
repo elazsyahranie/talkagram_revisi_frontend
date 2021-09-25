@@ -1,17 +1,53 @@
 .wholeContainer,
 .wholeRow {
   height: 100vh;
+  position: relative;
+}
+
+.notificationToast {
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 
 .chatRoomStyling {
   background-color: #fafafa;
+  position: relative;
+}
+
+.chooseChat {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.chooseChatHidden {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  display: none;
 }
 
 .chatMessagesContainer {
-  height: 525px;
+  position: relative;
+  max-height: 525px;
   overflow: auto;
+}
+
+.chatMessagesInnerContainer {
+  padding-top: 10px !important;
 }
 
 .roomChatSelect {
   width: 260px;
+}
+
+.formChat {
+  position: absolute;
+  width: 98%;
+  bottom: 4%;
 }

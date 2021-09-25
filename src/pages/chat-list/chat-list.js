@@ -1,4 +1,4 @@
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Toast } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
 import { getRooms, insertChat, chatHistory } from "../../redux/action/user";
@@ -11,6 +11,10 @@ function ChatList(props) {
   const [room, setRoom] = useState({ new: "", previous: "" });
   const [receiver, setReceiver] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
+  const [messageInput, setMessageInput] = useState(false);
+  const [notif, setNotif] = useState({
+    show: false,
+  });
 
   const { user_name, user_id } = props.auth.data;
 
@@ -37,8 +41,9 @@ function ChatList(props) {
   };
 
   const connect = () => {
-    const userId = user_id;
-    props.socket.emit("connection-server", userId);
+    props.socket.on("message-notif", (data) => {
+      setNotif(data);
+    });
   };
 
   const getChatHistory = (room_chat) => {
@@ -59,6 +64,7 @@ function ChatList(props) {
   const selectRoom = (room_chat, user_id) => {
     console.log(room_chat);
     console.log(user_id);
+    setMessageInput(true);
     props.socket.emit("joinRoom", {
       room: room_chat,
       previousRoom: room.previous,
@@ -82,6 +88,7 @@ function ChatList(props) {
         senderId: user_id,
         receiverId: receiver,
         chatMessage: message,
+        show: true,
       };
       props
         .insertChat(data)
@@ -95,6 +102,7 @@ function ChatList(props) {
       // props.socket.emit("privateMessage", setData);
       // props.socket.emit("broadcastMessage", setData);
       props.socket.emit("roomMessage", setData);
+      props.socket.emit("message-notif", data);
       setMessage(""); // Mmebuat form kosong kembali setelah mengirimkan pesan
     }
   };
@@ -110,6 +118,21 @@ function ChatList(props) {
     <>
       <Container fluid className={style.wholeContainer}>
         <Row className={style.wholeRow}>
+          {/* <Toast
+            onClose={() => setNotif({ ...notif, show: false })}
+            className={style.notificationToast}
+            show={true}
+            delay={3000}
+            autohide
+          >
+            <Toast.Header closeButton={false}>
+              <strong className="me-auto">
+                New message from {notif.user_name}
+              </strong>
+              <strong className="text-muted">Check it out!</strong>
+            </Toast.Header>
+            <Toast.Body>{notif.message}</Toast.Body>
+          </Toast> */}
           <Col lg={3} md={3} sm={12} xs={12}>
             <h5>{user_name}</h5>
             <Button variant="danger" onClick={() => handleLogOut()}>
@@ -136,19 +159,28 @@ function ChatList(props) {
                 </div>
               </>
             )}
-            {/* <Form className={style.roomChatSelect}>
-              <Form.Control as="select" onChange={(event) => selectRoom(event)}>
-                <option selected="selected" disabled hidden>
-                  Choose a room...
-                </option>
-                <option value="HTML">HTML</option>
-                <option value="CSS">CSS</option>
-                <option value="JavaScript">JavaScript</option>
-              </Form.Control>
-            </Form> */}
           </Col>
           <Col lg={9} md={9} sm={12} xs={12} className={style.chatRoomStyling}>
-            <h5>Chat room!</h5>
+            {messageInput && (
+              <Form className={style.formChat}>
+                <Form.Group>
+                  <Form.Control
+                    type="text"
+                    className={style.formChatControl}
+                    value={message}
+                    onChange={(event) => handleChatMessage(event)}
+                    onKeyDown={(event) => submitChatMessage(event)}
+                  />
+                </Form.Group>
+              </Form>
+            )}
+            <div
+              className={
+                !messageInput ? style.chooseChat : style.chooseChatHidden
+              }
+            >
+              <p>Please select a chat to start messaging</p>
+            </div>
             {chatHistory &&
               chatHistory.map((item, index) => (
                 <>
@@ -161,23 +193,14 @@ function ChatList(props) {
                 </>
               ))}
             <div className={style.chatMessagesContainer}>
-              {messages.map((item, index) => (
-                <p key={index}>
-                  <strong>{item.user_name}: </strong> {item.message}
-                </p>
-              ))}
+              <div className={style.chatMessagesInnerContainer}>
+                {messages.map((item, index) => (
+                  <p key={index}>
+                    <strong>{item.user_name}: </strong> {item.message}
+                  </p>
+                ))}
+              </div>
             </div>
-            <Form className={style.formChat}>
-              <Form.Group>
-                <Form.Control
-                  type="text"
-                  className={style.formChatControl}
-                  value={message}
-                  onChange={(event) => handleChatMessage(event)}
-                  onKeyDown={(event) => submitChatMessage(event)}
-                />
-              </Form.Group>
-            </Form>
           </Col>
         </Row>
       </Container>
