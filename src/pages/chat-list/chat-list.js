@@ -4,6 +4,7 @@ import {
   Col,
   Form,
   Button,
+  Image,
   Dropdown,
   Toast,
 } from "react-bootstrap";
@@ -11,7 +12,7 @@ import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
 import { getRooms, insertChat, chatHistory } from "../../redux/action/user";
 import { connect } from "react-redux";
-
+import noProfilePicture from "../components/img-not-found.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
@@ -27,8 +28,6 @@ function ChatList(props) {
     show: false,
   });
 
-  const { user_name, user_id } = props.auth.data;
-
   useEffect(() => {
     if (props.socket) {
       props.socket.on("chatMessage", (dataMessage) => {
@@ -40,7 +39,12 @@ function ChatList(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.socket, messages]);
 
+  const { user_name, user_id } = props.auth.data;
+
+  console.log(rooms);
+
   const getDataofRooms = () => {
+    console.log(user_id);
     props
       .getRooms(user_id)
       .then((res) => {
@@ -51,11 +55,11 @@ function ChatList(props) {
       });
   };
 
-  const connect = () => {
-    props.socket.on("message-notif", (data) => {
-      setNotif(data);
-    });
-  };
+  // const connect = () => {
+  //   props.socket.on("message-notif", (data) => {
+  //     setNotif(data);
+  //   });
+  // };
 
   const getChatHistory = (room_chat) => {
     props
@@ -129,70 +133,47 @@ function ChatList(props) {
     <>
       <Container fluid className={style.wholeContainer}>
         <Row className={style.wholeRow}>
-          {/* <Toast
-            onClose={() => setNotif({ ...notif, show: false })}
-            className={style.notificationToast}
-            show={true}
-            delay={3000}
-            autohide
-          >
-            <Toast.Header closeButton={false}>
-              <strong className="me-auto">
-                New message from {notif.user_name}
-              </strong>
-              <strong className="text-muted">Check it out!</strong>
-            </Toast.Header>
-            <Toast.Body>{notif.message}</Toast.Body>
-          </Toast> */}
           <Col lg={3} md={3} sm={12} xs={12}>
             <div className="my-4 d-flex justify-content-between">
               <h3 className={style.boldLogo}>Talkagram</h3>
-              <Dropdown>
-                <Dropdown.Toggle
-                  variant="light"
-                  className="bg-white border-0 p-0"
-                  id="dropdown-basic"
-                >
-                  <FontAwesomeIcon
-                    icon={faBars}
-                    className={style.showMenuIcon}
-                  />
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">
-                    Another action
-                  </Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">
-                    Something else
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              <FontAwesomeIcon icon={faBars} className={style.showMenuIcon} />
             </div>
             <Button variant="danger" onClick={() => handleLogOut()}>
               Log Out
             </Button>
-            {rooms.length > 0 ? (
-              rooms.map((item, index) => (
+            <div className="my-3">
+              {rooms.length > 0 ? (
+                rooms.map((item, index) => (
+                  <>
+                    <div
+                      className="mb-3 d-flex"
+                      key={index}
+                      onClick={() => selectRoom(item.room_chat, item.user_id)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <div>
+                        <Image
+                          src={noProfilePicture}
+                          alt=""
+                          className={style.profilePictureStyling}
+                          fluid
+                        />
+                      </div>
+                      <div className={style.roomUserStyling}>
+                        <h5 className="mb-2">{item.user_name}</h5>
+                        <h6 className="mt-2">{item.user_email}</h6>
+                      </div>
+                    </div>
+                  </>
+                ))
+              ) : (
                 <>
-                  <div
-                    className="mb-3"
-                    key={index}
-                    onClick={() => selectRoom(item.room_chat, item.user_id)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <h5 className="mb-2">{item.user_name}</h5>
-                    <h6>{item.user_email}</h6>
+                  <div>
+                    <h6>Go to menu to find a friend to start chat with!</h6>
                   </div>
                 </>
-              ))
-            ) : (
-              <>
-                <div>
-                  <h6>Go to menu to find a friend to start chat with!</h6>
-                </div>
-              </>
-            )}
+              )}
+            </div>
           </Col>
           <Col lg={9} md={9} sm={12} xs={12} className={style.chatRoomStyling}>
             {messageInput && (
