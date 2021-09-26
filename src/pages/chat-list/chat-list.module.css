@@ -1,3 +1,22 @@
+body {
+  font-family: "Rubik", sans-serif;
+}
+
+.boldLogo {
+  font-weight: bolder;
+  color: #7e98df;
+}
+
+.showMenuIcon {
+  color: #7e98df;
+  height: 33.594px;
+  font-size: 1.6rem;
+}
+
+.dropdown-toggle:after {
+  border: 0;
+}
+
 .wholeContainer,
 .wholeRow {
   height: 100vh;

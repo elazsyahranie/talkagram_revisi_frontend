@@ -1,8 +1,19 @@
-import { Container, Row, Col, Form, Button, Toast } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  Dropdown,
+  Toast,
+} from "react-bootstrap";
 import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
 import { getRooms, insertChat, chatHistory } from "../../redux/action/user";
 import { connect } from "react-redux";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 function ChatList(props) {
   const [message, setMessage] = useState("");
@@ -134,7 +145,30 @@ function ChatList(props) {
             <Toast.Body>{notif.message}</Toast.Body>
           </Toast> */}
           <Col lg={3} md={3} sm={12} xs={12}>
-            <h5>{user_name}</h5>
+            <div className="my-4 d-flex justify-content-between">
+              <h3 className={style.boldLogo}>Talkagram</h3>
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant="light"
+                  className="bg-white border-0 p-0"
+                  id="dropdown-basic"
+                >
+                  <FontAwesomeIcon
+                    icon={faBars}
+                    className={style.showMenuIcon}
+                  />
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">
+                    Another action
+                  </Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">
+                    Something else
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
             <Button variant="danger" onClick={() => handleLogOut()}>
               Log Out
             </Button>
