@@ -23,6 +23,7 @@ body {
   height: 64px;
   width: 64px;
   border-radius: 20px;
+  object-fit: cover;
 }
 
 .roomUserStyling {
