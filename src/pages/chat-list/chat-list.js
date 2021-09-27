@@ -5,7 +5,7 @@ import {
   Form,
   Button,
   Image,
-  Dropdown,
+  Modal,
   Toast,
 } from "react-bootstrap";
 import { useState, useEffect } from "react";
@@ -28,6 +28,14 @@ function ChatList(props) {
     show: false,
   });
 
+  // Modal
+  const [showMenuModal, setShowMenuModal] = useState(false);
+
+  const handleClose = () => setShowMenuModal(false);
+  const handleShow = () => setShowMenuModal(true);
+
+  const { user_name, user_id } = props.auth.data;
+
   useEffect(() => {
     if (props.socket) {
       props.socket.on("chatMessage", (dataMessage) => {
@@ -37,9 +45,7 @@ function ChatList(props) {
     getDataofRooms();
     // connect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.socket, messages]);
-
-  const { user_name, user_id } = props.auth.data;
+  }, [props.socket, messages, user_id]);
 
   console.log(rooms);
 
@@ -131,12 +137,38 @@ function ChatList(props) {
 
   return (
     <>
+      <Modal
+        {...props}
+        size="lg"
+        show={showMenuModal}
+        dialogClassName="main-modal"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <div className={style.menuModalStyling}>
+          <Modal.Body>
+            <h4>Centered Modal</h4>
+            <p>
+              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
+              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
+              ac consectetur ac, vestibulum at eros.
+            </p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() => handleClose()}>Close</Button>
+          </Modal.Footer>
+        </div>
+      </Modal>
       <Container fluid className={style.wholeContainer}>
         <Row className={style.wholeRow}>
           <Col lg={3} md={3} sm={12} xs={12}>
             <div className="my-4 d-flex justify-content-between">
               <h3 className={style.boldLogo}>Talkagram</h3>
-              <FontAwesomeIcon icon={faBars} className={style.showMenuIcon} />
+              <FontAwesomeIcon
+                icon={faBars}
+                className={style.showMenuIcon}
+                onClick={() => handleShow()}
+              />
             </div>
             <Button variant="danger" onClick={() => handleLogOut()}>
               Log Out

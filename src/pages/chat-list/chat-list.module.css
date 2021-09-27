@@ -13,6 +13,10 @@ body {
   font-size: 1.6rem;
 }
 
+.menuModalStyling {
+  background-color: #7e98df;
+}
+
 .wholeContainer,
 .wholeRow {
   height: 100vh;
