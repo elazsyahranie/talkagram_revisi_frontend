@@ -3,6 +3,10 @@
   align-items: center;
 }
 
+.leftMenu {
+  overflow-y: auto;
+}
+
 .profilePictureStyling {
   height: 84px;
   width: 84px;
@@ -21,4 +25,8 @@
 
 .hiddenDot {
   visibility: hidden;
+}
+
+.lowerIcons {
+  margin-right: 10px;
 }
