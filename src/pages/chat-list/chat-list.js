@@ -14,7 +14,13 @@ import { getRooms, insertChat, chatHistory } from "../../redux/action/user";
 import { connect } from "react-redux";
 import noProfilePicture from "../components/img-not-found.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faCog,
+  faUserFriends,
+  faUsers,
+  faQuestionCircle,
+} from "@fortawesome/free-solid-svg-icons";
 
 function ChatList(props) {
   const [message, setMessage] = useState("");
@@ -29,7 +35,7 @@ function ChatList(props) {
   });
 
   // Modal
-  const [showMenuModal, setShowMenuModal] = useState(false);
+  const [showMenuModal, setShowMenuModal] = useState(true);
 
   const handleClose = () => setShowMenuModal(false);
   const handleShow = () => setShowMenuModal(true);
@@ -141,23 +147,28 @@ function ChatList(props) {
         {...props}
         size="lg"
         show={showMenuModal}
-        dialogClassName="main-modal"
+        dialogClassName={style.menuModalStyling}
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <div className={style.menuModalStyling}>
-          <Modal.Body>
-            <h4>Centered Modal</h4>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-          </Modal.Body>
-          <Modal.Footer>
+        <Modal.Body>
+          <h4>Menu</h4>
+          <div className="my-3 d-flex align-items-center">
+            <FontAwesomeIcon icon={faCog} />
+            <h5 className="my-auto">Settings</h5>
+          </div>
+          <div className="my-3 d-flex align-items-center">
+            <FontAwesomeIcon icon={faUserFriends} />
+            <h5 className="my-auto">Contacts</h5>
+          </div>
+          <div className="my-3 d-flex align-items-center">
+            <FontAwesomeIcon icon={faUsers} />
+            <h5 className="my-auto">Add Friends</h5>
+          </div>
+          <div className="my-3">
             <Button onClick={() => handleClose()}>Close</Button>
-          </Modal.Footer>
-        </div>
+          </div>
+        </Modal.Body>
       </Modal>
       <Container fluid className={style.wholeContainer}>
         <Row className={style.wholeRow}>
