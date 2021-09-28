@@ -18,6 +18,10 @@ body {
   max-width: 400px !important;
 }
 
+.chatHeader {
+  background-color: white;
+}
+
 .wholeContainer,
 .wholeRow {
   height: 100vh;
@@ -27,6 +31,13 @@ body {
 .profilePictureStyling {
   height: 64px;
   width: 64px;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.headerProfilePicture {
+  height: 54px;
+  width: 54px;
   border-radius: 20px;
   object-fit: cover;
 }

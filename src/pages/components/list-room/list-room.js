@@ -12,7 +12,9 @@ function ListRoom(rooms) {
             <div
               className="mb-3 d-flex"
               key={index}
-              onClick={() => rooms.selectRoom(item.room_chat, item.user_id)}
+              onClick={() =>
+                rooms.selectRoom(item.room_chat, item.user_id, item.user_name)
+              }
               style={{ cursor: "pointer" }}
             >
               <div>
@@ -23,7 +25,7 @@ function ListRoom(rooms) {
                   fluid
                 />
               </div>
-              <div className={style.roomUserStyling}>
+              <div className={`${style.roomUserStyling} my-auto`}>
                 <h5 className="mb-2">{item.user_name}</h5>
                 <h6 className="mt-2">{item.user_email}</h6>
               </div>

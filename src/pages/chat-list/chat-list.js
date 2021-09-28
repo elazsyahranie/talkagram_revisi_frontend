@@ -21,6 +21,9 @@ import {
   faQuestionCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
+// IMAGES
+import noProfilePicture from "../components/img-not-found.png";
+
 // COMPONENTS
 import ListRoom from "../components/list-room/list-room";
 import Settings from "../components/settings/settings";
@@ -32,11 +35,16 @@ function ChatList(props) {
   const [room, setRoom] = useState({ new: "", previous: "" });
   const [receiver, setReceiver] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
+  const [chatHeader, setChatHeader] = useState([]);
   const [messageInput, setMessageInput] = useState(false);
   const [userOnline, setUserOnline] = useState([]);
   const [notif, setNotif] = useState({
     show: false,
   });
+
+  const mappedUserOnline = userOnline.map(({ userId }) => userId);
+
+  console.log(mappedUserOnline);
 
   // Modal
   const [showMenuModal, setShowMenuModal] = useState(false);
@@ -60,7 +68,7 @@ function ChatList(props) {
   }, [props.socket, messages, user_id]);
 
   const getDataofRooms = () => {
-    console.log(user_id);
+    // console.log(user_id);
     props
       .getRooms(user_id)
       .then((res) => {
@@ -96,7 +104,7 @@ function ChatList(props) {
     setMessage(event.target.value);
   };
 
-  const selectRoom = (room_chat, user_id) => {
+  const selectRoom = (room_chat, user_id, user_name) => {
     console.log(room_chat);
     console.log(user_id);
     setMessageInput(true);
@@ -107,6 +115,7 @@ function ChatList(props) {
     });
     setRoom({ ...room, new: room_chat, old: room_chat });
     setReceiver(user_id);
+    setChatHeader({ user_name });
     getChatHistory(room_chat);
   };
 
@@ -147,8 +156,6 @@ function ChatList(props) {
     localStorage.clear();
     props.history.push("/login");
   };
-
-  // console.log(userOnline);
 
   return (
     <>
@@ -196,6 +203,7 @@ function ChatList(props) {
             <div className="my-3">
               <ListRoom
                 data={rooms}
+                onlineList={userOnline}
                 // testBindingComponents={testBindingComponents}
                 selectRoom={selectRoom}
               />
@@ -205,6 +213,32 @@ function ChatList(props) {
             </div>
           </Col>
           <Col lg={9} md={9} sm={12} xs={12} className={style.chatRoomStyling}>
+            {messageInput && (
+              <div>
+                <Container className="py-4">
+                  <div className="d-flex">
+                    <Image
+                      src={noProfilePicture}
+                      alt=""
+                      className={`${style.headerProfilePicture} me-4`}
+                      fluid
+                    />
+                    <div
+                      className={
+                        Object.values(userOnline).includes(receiver)
+                          ? "d-flex align-items-center"
+                          : "d-flex"
+                      }
+                    >
+                      <h5>{chatHeader.user_name}</h5>
+                      {Object.values(userOnline).includes(receiver) ? (
+                        <h6>Online</h6>
+                      ) : null}
+                    </div>
+                  </div>
+                </Container>
+              </div>
+            )}
             {messageInput && (
               <Form className={style.formChat}>
                 <Form.Group>
@@ -228,15 +262,15 @@ function ChatList(props) {
             {chatHistory &&
               chatHistory.map((item, index) => (
                 <>
-                  <div key={index}>
+                  <Container key={index}>
                     <p>
                       <strong>{item.user_name}: </strong>
                       {item.message}
                     </p>
-                  </div>
+                  </Container>
                 </>
               ))}
-            <div className={style.chatMessagesContainer}>
+            <Container className={style.chatMessagesContainer}>
               <div className={style.chatMessagesInnerContainer}>
                 {messages.map((item, index) => (
                   <p key={index}>
@@ -244,7 +278,7 @@ function ChatList(props) {
                   </p>
                 ))}
               </div>
-            </div>
+            </Container>
           </Col>
         </Row>
       </Container>
