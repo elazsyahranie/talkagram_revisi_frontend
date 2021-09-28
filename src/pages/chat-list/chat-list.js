@@ -12,7 +12,6 @@ import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
 import { getRooms, insertChat, chatHistory } from "../../redux/action/user";
 import { connect } from "react-redux";
-import noProfilePicture from "../components/img-not-found.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
@@ -21,6 +20,10 @@ import {
   faUsers,
   faQuestionCircle,
 } from "@fortawesome/free-solid-svg-icons";
+
+// COMPONENTS
+import ListRoom from "../components/list-room/list-room";
+import Settings from "../components/settings/settings";
 
 function ChatList(props) {
   const [message, setMessage] = useState("");
@@ -145,7 +148,7 @@ function ChatList(props) {
     props.history.push("/login");
   };
 
-  console.log(userOnline);
+  // console.log(userOnline);
 
   return (
     <>
@@ -191,37 +194,14 @@ function ChatList(props) {
               Log Out
             </Button>
             <div className="my-3">
-              {rooms.length > 0 ? (
-                rooms.map((item, index) => (
-                  <>
-                    <div
-                      className="mb-3 d-flex"
-                      key={index}
-                      onClick={() => selectRoom(item.room_chat, item.user_id)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <div>
-                        <Image
-                          src={noProfilePicture}
-                          alt=""
-                          className={style.profilePictureStyling}
-                          fluid
-                        />
-                      </div>
-                      <div className={style.roomUserStyling}>
-                        <h5 className="mb-2">{item.user_name}</h5>
-                        <h6 className="mt-2">{item.user_email}</h6>
-                      </div>
-                    </div>
-                  </>
-                ))
-              ) : (
-                <>
-                  <div>
-                    <h6>Go to menu to find a friend to start chat with!</h6>
-                  </div>
-                </>
-              )}
+              <ListRoom
+                data={rooms}
+                // testBindingComponents={testBindingComponents}
+                selectRoom={selectRoom}
+              />
+            </div>
+            <div className="my-3">
+              <Settings />
             </div>
           </Col>
           <Col lg={9} md={9} sm={12} xs={12} className={style.chatRoomStyling}>
