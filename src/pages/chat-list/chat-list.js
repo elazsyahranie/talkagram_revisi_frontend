@@ -30,30 +30,31 @@ function ChatList(props) {
   const [receiver, setReceiver] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
   const [messageInput, setMessageInput] = useState(false);
+  const [userOnline, setUserOnline] = useState([]);
   const [notif, setNotif] = useState({
     show: false,
   });
 
   // Modal
-  const [showMenuModal, setShowMenuModal] = useState(true);
+  const [showMenuModal, setShowMenuModal] = useState(false);
 
   const handleClose = () => setShowMenuModal(false);
   const handleShow = () => setShowMenuModal(true);
 
   const { user_name, user_id } = props.auth.data;
 
+  const userId = props.auth.data.user_id;
+
   useEffect(() => {
     if (props.socket) {
       props.socket.on("chatMessage", (dataMessage) => {
         setMessages([...messages, dataMessage]);
       });
+      connect();
     }
     getDataofRooms();
-    // connect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.socket, messages, user_id]);
-
-  console.log(rooms);
 
   const getDataofRooms = () => {
     console.log(user_id);
@@ -67,11 +68,15 @@ function ChatList(props) {
       });
   };
 
-  // const connect = () => {
-  //   props.socket.on("message-notif", (data) => {
-  //     setNotif(data);
-  //   });
-  // };
+  const connect = () => {
+    props.socket.emit("connect-server", { userId });
+    props.socket.on("list-users-online", (listUsersOnline) => {
+      setUserOnline(listUsersOnline);
+    });
+    props.socket.on("message-notif", (data) => {
+      setNotif(data);
+    });
+  };
 
   const getChatHistory = (room_chat) => {
     props
@@ -135,11 +140,12 @@ function ChatList(props) {
   };
 
   const handleLogOut = () => {
+    props.socket.emit("disconnect-server", { userId });
     localStorage.clear();
     props.history.push("/login");
   };
 
-  // console.log(rooms);
+  console.log(userOnline);
 
   return (
     <>
