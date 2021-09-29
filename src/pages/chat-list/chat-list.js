@@ -49,8 +49,8 @@ function ChatList(props) {
   const handleShow = () => setShowMenuModal(true);
 
   // Left Menu
-  const [showListRoom, setShowListRoom] = useState(false);
-  const [showSettings, setShowSetting] = useState(true);
+  const [showListRoom, setShowListRoom] = useState(true);
+  const [showSettings, setShowSetting] = useState(false);
 
   //Back to Chat
   const backToChat = () => {
@@ -74,7 +74,7 @@ function ChatList(props) {
   }, [props.socket, messages, user_id]);
 
   const connect = () => {
-    props.socket.emit("connect-server", { userId });
+    props.socket.emit("connect-server", userId);
     props.socket.on("list-users-online", (listUsersOnline) => {
       setUserOnline(listUsersOnline);
     });
@@ -84,6 +84,8 @@ function ChatList(props) {
       setNotif(data);
     });
   };
+
+  console.log(userOnline);
 
   const getDataofRooms = () => {
     // console.log(user_id);
@@ -113,7 +115,7 @@ function ChatList(props) {
   };
 
   // Map the userOnline object, so we can check whether it includes the receiverId or not
-  const mappedUserOnline = userOnline.map(({ userId }) => userId);
+  // const mappedUserOnline = userOnline.map(({ userId }) => userId);
 
   // MENU FUNCTIONS //
   const goToSetting = () => {
@@ -140,6 +142,11 @@ function ChatList(props) {
     });
     setRoom({ ...room, new: room_chat, old: room_chat });
     setReceiver(user_id);
+    if (userOnline.includes(user_id)) {
+      console.log("The user is online!");
+    } else {
+      console.log("The user is offline!");
+    }
     setChatHeader({ user_name });
     getChatHistory(room_chat);
   };
@@ -266,15 +273,13 @@ function ChatList(props) {
                     />
                     <div
                       className={
-                        !mappedUserOnline.includes(receiver)
+                        !userOnline.includes(receiver)
                           ? "d-flex align-items-center"
                           : null
                       }
                     >
                       <h5>{chatHeader.user_name}</h5>
-                      {mappedUserOnline.includes(receiver) ? (
-                        <h6>Online</h6>
-                      ) : null}
+                      {userOnline.includes(receiver) ? <h6>Online</h6> : null}
                     </div>
                   </div>
                 </Container>
