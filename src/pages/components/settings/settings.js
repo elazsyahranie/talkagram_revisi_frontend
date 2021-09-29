@@ -1,5 +1,153 @@
-function Settings() {
-  return <h5>Settings component!</h5>;
+import { Image, Form } from "react-bootstrap";
+import leftArrow from "../back.png";
+import style from "./settings.module.css";
+import noProfilePicture from "../img-not-found.png";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock, faNewspaper } from "@fortawesome/free-solid-svg-icons";
+
+function Settings(props) {
+  // PHONE
+  const [showPhone, setShowPhone] = useState(true);
+  const [showPhoneForm, setShowPhoneForm] = useState(false);
+
+  const [phone, setPhone] = useState({ userPhone: "" });
+
+  // BIO
+  const [showBio, setShowBio] = useState(true);
+  const [showBioForm, setShowBioForm] = useState(false);
+
+  const [bio, setBio] = useState({ userBio: "" });
+
+  const displayPhoneForm = () => {
+    setShowPhone(false);
+    setShowPhoneForm(true);
+  };
+
+  const handlePhoneChange = (event) => {
+    setPhone({ ...phone, [event.target.name]: event.target.value });
+  };
+
+  const submitPhone = (event) => {
+    event.preventDefault();
+    console.log(phone);
+  };
+
+  const displayBioForm = () => {
+    setShowBio(false);
+    setShowBioForm(true);
+  };
+
+  const handleBioChange = (event) => {
+    setBio({ ...bio, [event.target.name]: event.target.value });
+  };
+
+  const submitBioChange = (event) => {
+    event.preventDefault();
+    console.log(bio);
+  };
+
+  return (
+    <>
+      <div>
+        <div className="mt-4 d-flex justify-content-between">
+          <div>
+            <Image
+              src={leftArrow}
+              alt=""
+              onClick={() => props.backToChat()}
+              className={style.shownDot}
+              fluid
+            />
+          </div>
+          <h6 className={`text-center fw-bold ${style.userEmailStyling}`}>
+            {props.auth.data.user_email}
+          </h6>
+          <Image src={leftArrow} alt="" className={style.hiddenDot} />
+        </div>
+        <div className="mt-4 d-flex justify-content-center">
+          <Image
+            src={noProfilePicture}
+            alt=""
+            className={style.profilePictureStyling}
+            fluid
+          />
+        </div>
+        <div className="mt-4">
+          <h6 className="text-center">{props.auth.data.user_name}</h6>
+        </div>
+        <div className="mt-3">
+          <h6 className="text-center">{props.auth.data.user_email}</h6>
+        </div>
+        <div className="mt-5 mb-4">
+          <div className="mb-3">
+            <h5 className="fw-bold">Account</h5>
+          </div>
+          {showPhone && (
+            <div>
+              <h6 onClick={() => displayPhoneForm()}>
+                {props.auth.data.user_phone}
+              </h6>
+            </div>
+          )}
+          {showPhoneForm && (
+            <Form onSubmit={(event) => submitPhone(event)}>
+              <Form.Control
+                type="text"
+                className={style.smallerFormControl}
+                name="userPhone"
+                onChange={(event) => handlePhoneChange(event)}
+              />
+            </Form>
+          )}
+          <div>
+            <small>Tap to change phone number</small>
+          </div>
+        </div>
+      </div>
+      <hr></hr>
+      <div className="mt-4 mb-4">
+        <h6>{props.auth.data.user_email}</h6>
+        <h6 className="text-muted">User email</h6>
+      </div>
+      <hr></hr>
+      <div className="mt-4 mb-4">
+        {showBio && (
+          <h6 className="fw-bold" onClick={() => displayBioForm()}>
+            {props.auth.data.user_bio}
+          </h6>
+        )}
+        {showBioForm && (
+          <Form onSubmit={(event) => submitBioChange(event)}>
+            <Form.Control
+              type="text"
+              className={style.smallerFormControl}
+              name="userBio"
+              onChange={(event) => handleBioChange(event)}
+            />
+          </Form>
+        )}
+        <h6 className="text-muted">Bio</h6>
+      </div>
+      <hr></hr>
+      <div className="mt-4">
+        <h5 className="fw-bold">Settings</h5>
+        <div className="d-flex">
+          <FontAwesomeIcon icon={faLock} className={style.lowerIcons} />{" "}
+          <h6>Change Password</h6>
+        </div>
+        <div className="d-flex">
+          <FontAwesomeIcon icon={faNewspaper} className={style.lowerIcons} />{" "}
+          <h6
+            onClick={() => props.handleLogOut()}
+            style={{ cursor: "pointer" }}
+          >
+            Logout
+          </h6>
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default Settings;

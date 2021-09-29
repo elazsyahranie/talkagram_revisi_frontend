@@ -49,8 +49,14 @@ function ChatList(props) {
   const handleShow = () => setShowMenuModal(true);
 
   // Left Menu
-  const [showListRoom, setShowListRoom] = useState(true);
-  const [showSettings, setShowSetting] = useState(false);
+  const [showListRoom, setShowListRoom] = useState(false);
+  const [showSettings, setShowSetting] = useState(true);
+
+  //Back to Chat
+  const backToChat = () => {
+    setShowListRoom(true);
+    setShowSetting(false);
+  };
 
   const { user_name, user_id } = props.auth.data;
 
@@ -111,7 +117,9 @@ function ChatList(props) {
 
   // MENU FUNCTIONS //
   const goToSetting = () => {
-    console.log("Go to settings");
+    setShowSetting(true);
+    setShowListRoom(false);
+    setShowMenuModal(false);
   };
 
   const goToContacts = () => {
@@ -186,11 +194,19 @@ function ChatList(props) {
       >
         <Modal.Body>
           <h4>Menu</h4>
-          <div className="my-3 d-flex align-items-center">
+          <div
+            className="my-3 d-flex align-items-center"
+            onClick={() => goToSetting()}
+            style={{ cursor: "pointer" }}
+          >
             <FontAwesomeIcon icon={faCog} />
             <h5 className="my-auto">Settings</h5>
           </div>
-          <div className="my-3 d-flex align-items-center">
+          <div
+            className="my-3 d-flex align-items-center"
+            onClick={() => goToContacts()}
+            style={{ cursor: "pointer" }}
+          >
             <FontAwesomeIcon icon={faUserFriends} />
             <h5 className="my-auto">Contacts</h5>
           </div>
@@ -218,20 +234,24 @@ function ChatList(props) {
                 onClick={() => handleShow()}
               />
             </div>
-            <Button variant="danger" onClick={() => handleLogOut()}>
-              Log Out
-            </Button>
-            <div className="my-3">
-              <ListRoom
-                data={rooms}
-                onlineList={userOnline}
-                // testBindingComponents={testBindingComponents}
-                selectRoom={selectRoom}
-              />
-            </div>
-            <div className="my-3">
-              <Settings />
-            </div>
+            {showListRoom && (
+              <div className="my-3">
+                <ListRoom
+                  data={rooms}
+                  onlineList={userOnline}
+                  selectRoom={selectRoom}
+                />
+              </div>
+            )}
+            {showSettings && (
+              <div className="my-3">
+                <Settings
+                  {...props}
+                  backToChat={backToChat}
+                  handleLogOut={handleLogOut}
+                />
+              </div>
+            )}
           </Col>
           <Col lg={9} md={9} sm={12} xs={12} className={style.chatRoomStyling}>
             {messageInput && (

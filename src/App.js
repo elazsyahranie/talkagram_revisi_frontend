@@ -9,7 +9,6 @@ import LandingPage from "./pages/landing-page/landing-page";
 import Login from "./pages/auth/login/login";
 import Register from "./pages/auth/register/register";
 import ChatList from "./pages/chat-list/chat-list";
-import Settings from "./pages/settings/settings";
 
 import io from "socket.io-client";
 
@@ -52,7 +51,6 @@ function App() {
             exact
             component={ChatList}
           />
-          <PrivateRoute path="/settings" exact component={Settings} />
         </Switch>
       </Router>
     </Provider>
