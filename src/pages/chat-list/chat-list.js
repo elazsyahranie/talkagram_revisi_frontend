@@ -38,13 +38,10 @@ function ChatList(props) {
   const [chatHeader, setChatHeader] = useState([]);
   const [messageInput, setMessageInput] = useState(false);
   const [userOnline, setUserOnline] = useState([]);
+  const [isOnline, setIsOnline] = useState(false);
   const [notif, setNotif] = useState({
     show: false,
   });
-
-  const mappedUserOnline = userOnline.map(({ userId }) => userId);
-
-  console.log(mappedUserOnline);
 
   // Modal
   const [showMenuModal, setShowMenuModal] = useState(false);
@@ -104,9 +101,12 @@ function ChatList(props) {
     setMessage(event.target.value);
   };
 
+  // Map the userOnline object, so we can check whether it includes the receiverId or not
+  const mappedUserOnline = userOnline.map(({ userId }) => userId);
+
   const selectRoom = (room_chat, user_id, user_name) => {
-    console.log(room_chat);
-    console.log(user_id);
+    // console.log(room_chat);
+    // console.log(user_id);
     setMessageInput(true);
     props.socket.emit("joinRoom", {
       room: room_chat,
@@ -115,9 +115,22 @@ function ChatList(props) {
     });
     setRoom({ ...room, new: room_chat, old: room_chat });
     setReceiver(user_id);
+    // if (mappedUserOnline.includes(user_id)) {
+    //   console.log("The user is on");
+    // } else {
+    //   console.log("The user is off");
+    // }
     setChatHeader({ user_name });
     getChatHistory(room_chat);
   };
+
+  // if (isOnline) {
+  //   console.log("Seems that the user is on");
+  // } else {
+  //   console.log("Seems that the user if off");
+  // }
+
+  console.log(mappedUserOnline);
 
   const submitChatMessage = (event) => {
     if (event.keyCode === 13) {
@@ -225,13 +238,13 @@ function ChatList(props) {
                     />
                     <div
                       className={
-                        Object.values(userOnline).includes(receiver)
+                        !mappedUserOnline.includes(receiver)
                           ? "d-flex align-items-center"
-                          : "d-flex"
+                          : null
                       }
                     >
                       <h5>{chatHeader.user_name}</h5>
-                      {Object.values(userOnline).includes(receiver) ? (
+                      {mappedUserOnline.includes(receiver) ? (
                         <h6>Online</h6>
                       ) : null}
                     </div>
@@ -261,14 +274,14 @@ function ChatList(props) {
             </div>
             {chatHistory &&
               chatHistory.map((item, index) => (
-                <>
-                  <Container key={index}>
+                <div key={index}>
+                  <Container>
                     <p>
                       <strong>{item.user_name}: </strong>
                       {item.message}
                     </p>
                   </Container>
-                </>
+                </div>
               ))}
             <Container className={style.chatMessagesContainer}>
               <div className={style.chatMessagesInnerContainer}>
