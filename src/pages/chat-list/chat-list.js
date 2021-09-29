@@ -38,7 +38,6 @@ function ChatList(props) {
   const [chatHeader, setChatHeader] = useState([]);
   const [messageInput, setMessageInput] = useState(false);
   const [userOnline, setUserOnline] = useState([]);
-  const [isOnline, setIsOnline] = useState(false);
   const [notif, setNotif] = useState({
     show: false,
   });
@@ -48,6 +47,10 @@ function ChatList(props) {
 
   const handleClose = () => setShowMenuModal(false);
   const handleShow = () => setShowMenuModal(true);
+
+  // Left Menu
+  const [showListRoom, setShowListRoom] = useState(true);
+  const [showSettings, setShowSetting] = useState(false);
 
   const { user_name, user_id } = props.auth.data;
 
@@ -64,6 +67,18 @@ function ChatList(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.socket, messages, user_id]);
 
+  const connect = () => {
+    props.socket.emit("connect-server", { userId });
+    props.socket.on("list-users-online", (listUsersOnline) => {
+      setUserOnline(listUsersOnline);
+    });
+    props.socket.on("notif-message", (data) => {
+      console.log("Test");
+      console.log(data);
+      setNotif(data);
+    });
+  };
+
   const getDataofRooms = () => {
     // console.log(user_id);
     props
@@ -74,16 +89,6 @@ function ChatList(props) {
       .catch((err) => {
         console.log(err);
       });
-  };
-
-  const connect = () => {
-    props.socket.emit("connect-server", { userId });
-    props.socket.on("list-users-online", (listUsersOnline) => {
-      setUserOnline(listUsersOnline);
-    });
-    props.socket.on("message-notif", (data) => {
-      setNotif(data);
-    });
   };
 
   const getChatHistory = (room_chat) => {
@@ -103,6 +108,20 @@ function ChatList(props) {
 
   // Map the userOnline object, so we can check whether it includes the receiverId or not
   const mappedUserOnline = userOnline.map(({ userId }) => userId);
+
+  // MENU FUNCTIONS //
+  const goToSetting = () => {
+    console.log("Go to settings");
+  };
+
+  const goToContacts = () => {
+    console.log("Go to contacts");
+  };
+
+  const goToAddFriends = () => {
+    console.log("Go to add friends ");
+  };
+  // MENU FUNCTIONS //
 
   const selectRoom = (room_chat, user_id, user_name) => {
     setMessageInput(true);
@@ -144,7 +163,7 @@ function ChatList(props) {
       // props.socket.emit("privateMessage", setData);
       // props.socket.emit("broadcastMessage", setData);
       props.socket.emit("roomMessage", setData);
-      props.socket.emit("message-notif", data);
+      props.socket.emit("notif-message", data);
       setMessage(""); // Mmebuat form kosong kembali setelah mengirimkan pesan
     }
   };
@@ -178,6 +197,10 @@ function ChatList(props) {
           <div className="my-3 d-flex align-items-center">
             <FontAwesomeIcon icon={faUsers} />
             <h5 className="my-auto">Add Friends</h5>
+          </div>
+          <div className="my-3 d-flex align-items-center">
+            <FontAwesomeIcon icon={faQuestionCircle} />
+            <h5 className="my-auto">Talkagram FAQ</h5>
           </div>
           <div className="my-3">
             <Button onClick={() => handleClose()}>Close</Button>
@@ -279,6 +302,23 @@ function ChatList(props) {
             </Container>
           </Col>
         </Row>
+        <Toast
+          className={style.notificationToast}
+          onClose={() => setNotif({ ...notif, show: false })}
+          show={notif.show}
+          delay={3000}
+          autohide
+        >
+          <Toast.Header closeButton={false}>
+            <img
+              src="holder.js/20x20?text=%20"
+              className="rounded me-1"
+              alt=""
+            />
+            <h6 className="fw-bold mx-auto">{notif.senderId}</h6>
+          </Toast.Header>
+          <Toast.Body>See? Just like this.</Toast.Body>
+        </Toast>
       </Container>
     </>
   );

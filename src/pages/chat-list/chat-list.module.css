@@ -35,6 +35,12 @@ body {
   object-fit: cover;
 }
 
+.notificationToast {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
 .headerProfilePicture {
   height: 54px;
   width: 54px;
@@ -45,12 +51,6 @@ body {
 .roomUserStyling {
   margin-left: 6px;
   margin-right: 6px;
-}
-
-.notificationToast {
-  position: absolute;
-  top: 20px;
-  right: 20px;
 }
 
 .chatRoomStyling {
