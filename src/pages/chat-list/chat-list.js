@@ -105,8 +105,6 @@ function ChatList(props) {
   const mappedUserOnline = userOnline.map(({ userId }) => userId);
 
   const selectRoom = (room_chat, user_id, user_name) => {
-    // console.log(room_chat);
-    // console.log(user_id);
     setMessageInput(true);
     props.socket.emit("joinRoom", {
       room: room_chat,
@@ -115,22 +113,9 @@ function ChatList(props) {
     });
     setRoom({ ...room, new: room_chat, old: room_chat });
     setReceiver(user_id);
-    // if (mappedUserOnline.includes(user_id)) {
-    //   console.log("The user is on");
-    // } else {
-    //   console.log("The user is off");
-    // }
     setChatHeader({ user_name });
     getChatHistory(room_chat);
   };
-
-  // if (isOnline) {
-  //   console.log("Seems that the user is on");
-  // } else {
-  //   console.log("Seems that the user if off");
-  // }
-
-  console.log(mappedUserOnline);
 
   const submitChatMessage = (event) => {
     if (event.keyCode === 13) {
