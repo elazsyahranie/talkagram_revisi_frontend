@@ -1,11 +1,11 @@
-import { Image, Form } from "react-bootstrap";
+import { Image, Form, Modal, Button, Alert } from "react-bootstrap";
 import leftArrow from "../back.png";
 import style from "./settings.module.css";
 import noProfilePicture from "../img-not-found.png";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faNewspaper } from "@fortawesome/free-solid-svg-icons";
-import { changeUserData } from "../../../redux/action/user";
+import { changeUserData, changeUserPassword } from "../../../redux/action/user";
 import { connect } from "react-redux";
 
 function Settings(props) {
@@ -28,6 +28,19 @@ function Settings(props) {
   const [showBioForm, setShowBioForm] = useState(false);
 
   const [bio, setBio] = useState({ userBio: "" });
+
+  // PASSWORD
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(true);
+
+  const [password, setPassword] = useState({
+    userPassword: "",
+    userNewPassword: "",
+  });
+
+  const [previousPasswordWrong, setPreviousPasswordWrong] = useState("");
+
+  const handleClosePasswordModal = () => setShowChangePasswordModal(false);
+  const handleShowPasswordModal = () => setShowChangePasswordModal(true);
 
   const displayUserNameForm = () => {
     setShowUserName(false);
@@ -112,8 +125,82 @@ function Settings(props) {
       });
   };
 
+  const handlePasswordChange = (event) => {
+    setPassword({
+      ...password,
+      [event.target.name]: event.target.value,
+    });
+    setPreviousPasswordWrong("");
+  };
+
+  const submitNewPassword = (event) => {
+    event.preventDefault();
+    props
+      .changeUserPassword(password, props.auth.data.user_id)
+      .then(() => {
+        props.getUserData();
+      })
+      .catch((err) => {
+        setPreviousPasswordWrong(err.response.data.msg);
+      });
+  };
+
   return (
     <>
+      <Modal
+        {...props}
+        size="lg"
+        show={showChangePasswordModal}
+        dialogClassName={style.changePasswordModalStyling}
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Body>
+          <h4>Change password</h4>
+          <Form onSubmit={(event) => submitNewPassword(event)}>
+            <Form.Group className="mb-2">
+              <Form.Label>Previous Password</Form.Label>
+              <Form.Control
+                type="password"
+                name="userPassword"
+                onChange={(event) => handlePasswordChange(event)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>New Password</Form.Label>
+              <Form.Control
+                type="password"
+                name="userNewPassword"
+                onChange={(event) => handlePasswordChange(event)}
+              />
+            </Form.Group>
+            <Button
+              onClick={(event) => submitNewPassword(event)}
+              className="mt-2 py-2 w-100"
+            >
+              Submit
+            </Button>
+            {previousPasswordWrong && (
+              <div className="mt-2">
+                <Alert
+                  variant="danger"
+                  className="d-flex justify-content-center"
+                >
+                  <span>{previousPasswordWrong}</span>
+                </Alert>
+              </div>
+            )}
+            <div
+              className="d-flex justify-content-center mt-1"
+              style={{ cursor: "pointer" }}
+            >
+              <small onClick={() => handleClosePasswordModal()}>
+                <u>Close</u>
+              </small>
+            </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
       <div>
         <div className="mt-4 d-flex justify-content-between">
           <div>
@@ -209,7 +296,7 @@ function Settings(props) {
       <hr></hr>
       <div className="mt-4">
         <h5 className="fw-bold">Settings</h5>
-        <div className="d-flex">
+        <div className="d-flex" onClick={() => handleShowPasswordModal()}>
           <FontAwesomeIcon icon={faLock} className={style.lowerIcons} />{" "}
           <h6>Change Password</h6>
         </div>
@@ -231,6 +318,6 @@ const mapStatetoProps = (state) => ({
   user: state.user,
 });
 
-const mapDispatchtoProps = { changeUserData };
+const mapDispatchtoProps = { changeUserData, changeUserPassword };
 
 export default connect(mapStatetoProps, mapDispatchtoProps)(Settings);

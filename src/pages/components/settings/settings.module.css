@@ -18,6 +18,10 @@
   object-fit: cover;
 }
 
+.changePasswordModalStyling {
+  width: 509px;
+}
+
 .chatRoomStyling {
   background-color: #fafafa;
   position: relative;
