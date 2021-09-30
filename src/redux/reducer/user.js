@@ -31,14 +31,14 @@ const user = (state = initialState, action) => {
         data: {},
         msg: action.payload.response.data.msg,
       };
-    case "CHANGE_USER_NAME_PENDING": // prosesnya sedang berjalan
+    case "CHANGE_USER_DATA_PENDING": // prosesnya sedang berjalan
       return {
         ...state,
         isLoading: true,
         isError: false,
         msg: "",
       };
-    case "CHANGE_USER_NAME_FULFILLED": // ketika sukses
+    case "CHANGE_USER_DATA_FULFILLED": // ketika sukses
       return {
         ...state,
         isLoading: false,
@@ -46,7 +46,30 @@ const user = (state = initialState, action) => {
         data: action.payload.data.data,
         msg: action.payload.data.msg,
       };
-    case "CHANGE_USER_NAME_REJECTED": // ketika gagal
+    case "CHANGE_USER_DATA_REJECTED": // ketika gagal
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        data: {},
+        msg: action.payload.response.data.msg,
+      };
+    case "CHANGE_USER_PASSWORD_PENDING": // prosesnya sedang berjalan
+      return {
+        ...state,
+        isLoading: true,
+        isError: false,
+        msg: "",
+      };
+    case "CHANGE_USER_PASSWORD_FULFILLED": // ketika sukses
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        data: action.payload.data.data,
+        msg: action.payload.data.msg,
+      };
+    case "CHANGE_USER_PASSWORD_REJECTED": // ketika gagal
       return {
         ...state,
         isLoading: false,

@@ -7,10 +7,17 @@ export const getUserbyId = (id) => {
   };
 };
 
-export const changeUserName = (data, id) => {
+export const changeUserData = (data, id) => {
   return {
-    type: "CHANGE_USER_NAME",
+    type: "CHANGE_USER_DATA",
     payload: axiosApiIntances.patch(`user/${id}`, data),
+  };
+};
+
+export const changeUserPassword = (data, id) => {
+  return {
+    type: "CHANGE_USER_PASSWORD",
+    payload: axiosApiIntances.patch(`user/update-password/${id}`, data),
   };
 };
 

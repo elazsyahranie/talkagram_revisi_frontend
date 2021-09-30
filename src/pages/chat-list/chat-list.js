@@ -79,7 +79,7 @@ function ChatList(props) {
     // console.log("Testing the getUserData function");
     props
       .getUserbyId(userId)
-      .then((res) => {
+      .then(() => {
         setTimeout(() => {
           window.location.reload();
         }, 2000);

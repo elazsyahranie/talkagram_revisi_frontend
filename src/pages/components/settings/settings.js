@@ -5,7 +5,7 @@ import noProfilePicture from "../img-not-found.png";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faNewspaper } from "@fortawesome/free-solid-svg-icons";
-import { changeUserName } from "../../../redux/action/user";
+import { changeUserData } from "../../../redux/action/user";
 import { connect } from "react-redux";
 
 function Settings(props) {
@@ -47,9 +47,8 @@ function Settings(props) {
       userBio: props.auth.data.user_bio,
     };
     props
-      .changeUserName(data, props.auth.data.user_id)
-      .then((res) => {
-        console.log(res);
+      .changeUserData(data, props.auth.data.user_id)
+      .then(() => {
         props.getUserData();
       })
       .catch((err) => {
@@ -70,7 +69,20 @@ function Settings(props) {
 
   const submitPhone = (event) => {
     event.preventDefault();
-    console.log(phone);
+    const data = {
+      userName: props.auth.data.user_name,
+      userEmail: props.auth.data.user_email,
+      ...phone,
+      userBio: props.auth.data.user_bio,
+    };
+    props
+      .changeUserData(data, props.auth.data.user_id)
+      .then(() => {
+        props.getUserData();
+      })
+      .then((err) => {
+        console.log(err);
+      });
   };
 
   const displayBioForm = () => {
@@ -84,7 +96,20 @@ function Settings(props) {
 
   const submitBioChange = (event) => {
     event.preventDefault();
-    console.log(bio);
+    const data = {
+      userName: props.auth.data.user_name,
+      userEmail: props.auth.data.user_email,
+      userPhone: props.auth.data.user_phone,
+      ...bio,
+    };
+    props
+      .changeUserData(data, props.auth.data.user_id)
+      .then(() => {
+        props.getUserData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -206,6 +231,6 @@ const mapStatetoProps = (state) => ({
   user: state.user,
 });
 
-const mapDispatchtoProps = { changeUserName };
+const mapDispatchtoProps = { changeUserData };
 
 export default connect(mapStatetoProps, mapDispatchtoProps)(Settings);
