@@ -30,7 +30,7 @@ function Settings(props) {
   const [bio, setBio] = useState({ userBio: "" });
 
   // PASSWORD
-  const [showChangePasswordModal, setShowChangePasswordModal] = useState(true);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
   const [password, setPassword] = useState({
     userPassword: "",
