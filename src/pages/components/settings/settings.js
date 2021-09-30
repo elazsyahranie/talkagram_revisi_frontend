@@ -50,6 +50,7 @@ function Settings(props) {
       .changeUserName(data, props.auth.data.user_id)
       .then((res) => {
         console.log(res);
+        props.getUserData();
       })
       .catch((err) => {
         console.log(err);

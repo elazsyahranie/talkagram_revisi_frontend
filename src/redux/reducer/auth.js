@@ -8,6 +8,29 @@ const initialState = {
 
 const auth = (state = initialState, action) => {
   switch (action.type) {
+    case "GET_USER_BY_ID_PENDING": // prosesnya sedang berjalan
+      return {
+        ...state,
+        isLoading: true,
+        isError: false,
+        msg: "",
+      };
+    case "GET_USER_BY_ID_FULFILLED": // ketika sukses
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        data: action.payload.data.data,
+        msg: action.payload.data.msg,
+      };
+    case "GET_USER_BY_ID_REJECTED": // ketika gagal
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        data: {},
+        msg: action.payload.response.data.msg,
+      };
     case "REGISTER_PENDING": // prosesnya sedang berjalan
       return {
         ...state,

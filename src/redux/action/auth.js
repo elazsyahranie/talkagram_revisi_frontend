@@ -13,3 +13,10 @@ export const loginUser = (data) => {
     payload: axiosApiIntances.post("auth/login", data),
   };
 };
+
+export const getUserbyId = (id) => {
+  return {
+    type: "GET_USER_BY_ID",
+    payload: axiosApiIntances.get(`user/${id}`),
+  };
+};
