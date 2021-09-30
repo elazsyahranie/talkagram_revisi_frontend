@@ -10,7 +10,12 @@ import {
 } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
-import { getRooms, insertChat, chatHistory } from "../../redux/action/user";
+import {
+  getRooms,
+  insertChat,
+  chatHistory,
+  getUserbyId,
+} from "../../redux/action/user";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -29,6 +34,7 @@ import ListRoom from "../components/list-room/list-room";
 import Settings from "../components/settings/settings";
 
 function ChatList(props) {
+  const [userData, setUserData] = useState([]);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [rooms, setRooms] = useState([]);
@@ -49,8 +55,8 @@ function ChatList(props) {
   const handleShow = () => setShowMenuModal(true);
 
   // Left Menu
-  const [showListRoom, setShowListRoom] = useState(true);
-  const [showSettings, setShowSetting] = useState(false);
+  const [showListRoom, setShowListRoom] = useState(false);
+  const [showSettings, setShowSetting] = useState(true);
 
   //Back to Chat
   const backToChat = () => {
@@ -69,9 +75,23 @@ function ChatList(props) {
       });
       connect();
     }
+    getUserData();
     getDataofRooms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.socket, messages, user_id]);
+
+  const getUserData = () => {
+    props
+      .getUserbyId(userId)
+      .then((res) => {
+        setUserData(res.value.data.data[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // console.log(userData);
 
   const connect = () => {
     props.socket.emit("connect-server", userId);
@@ -85,7 +105,7 @@ function ChatList(props) {
     });
   };
 
-  console.log(userOnline);
+  // console.log(userOnline);
 
   const getDataofRooms = () => {
     // console.log(user_id);
@@ -98,6 +118,8 @@ function ChatList(props) {
         console.log(err);
       });
   };
+
+  // console.log(props.auth.data);
 
   const getChatHistory = (room_chat) => {
     props
@@ -113,9 +135,6 @@ function ChatList(props) {
   const handleChatMessage = (event) => {
     setMessage(event.target.value);
   };
-
-  // Map the userOnline object, so we can check whether it includes the receiverId or not
-  // const mappedUserOnline = userOnline.map(({ userId }) => userId);
 
   // MENU FUNCTIONS //
   const goToSetting = () => {
@@ -142,11 +161,6 @@ function ChatList(props) {
     });
     setRoom({ ...room, new: room_chat, old: room_chat });
     setReceiver(user_id);
-    if (userOnline.includes(user_id)) {
-      console.log("The user is online!");
-    } else {
-      console.log("The user is offline!");
-    }
     setChatHeader({ user_name });
     getChatHistory(room_chat);
   };
@@ -353,6 +367,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
   user: state.user,
 });
-const mapDispatchToProps = { getRooms, insertChat, chatHistory };
+const mapDispatchToProps = { getRooms, insertChat, chatHistory, getUserbyId };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);

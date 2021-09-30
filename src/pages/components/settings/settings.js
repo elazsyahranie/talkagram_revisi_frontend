@@ -5,19 +5,58 @@ import noProfilePicture from "../img-not-found.png";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faNewspaper } from "@fortawesome/free-solid-svg-icons";
+import { changeUserName } from "../../../redux/action/user";
+import { connect } from "react-redux";
 
 function Settings(props) {
+  // NAME
+  const [showUserName, setShowUserName] = useState(true);
+  const [showUserNameForm, setShowUserNameForm] = useState(false);
+
+  const [userName, setUserName] = useState({ userName: "" });
+
   // PHONE
   const [showPhone, setShowPhone] = useState(true);
   const [showPhoneForm, setShowPhoneForm] = useState(false);
 
   const [phone, setPhone] = useState({ userPhone: "" });
 
+  // console.log(props.auth.data);
+
   // BIO
   const [showBio, setShowBio] = useState(true);
   const [showBioForm, setShowBioForm] = useState(false);
 
   const [bio, setBio] = useState({ userBio: "" });
+
+  const displayUserNameForm = () => {
+    setShowUserName(false);
+    setShowUserNameForm(true);
+  };
+
+  const handleUserNameChange = (event) => {
+    setUserName({ ...userName, [event.target.name]: event.target.value });
+  };
+
+  const submitUserName = (event) => {
+    event.preventDefault();
+    const data = {
+      ...userName,
+      userEmail: props.auth.data.user_email,
+      userPhone: props.auth.data.user_phone,
+      userBio: props.auth.data.user_bio,
+    };
+    props
+      .changeUserName(data, props.auth.data.user_id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // console.log(data);
+    // console.log(props.auth.data.user_id);
+  };
 
   const displayPhoneForm = () => {
     setShowPhone(false);
@@ -73,9 +112,21 @@ function Settings(props) {
             fluid
           />
         </div>
-        <div className="mt-4">
-          <h6 className="text-center">{props.auth.data.user_name}</h6>
-        </div>
+        {showUserName && (
+          <div className="mt-4" onClick={() => displayUserNameForm()}>
+            <h6 className="text-center">{props.auth.data.user_name}</h6>
+          </div>
+        )}
+        {showUserNameForm && (
+          <Form className="mt-4" onSubmit={(event) => submitUserName(event)}>
+            <Form.Control
+              type="text"
+              className={style.smallerFormControl}
+              name="userName"
+              onChange={(event) => handleUserNameChange(event)}
+            />
+          </Form>
+        )}
         <div className="mt-3">
           <h6 className="text-center">{props.auth.data.user_email}</h6>
         </div>
@@ -150,4 +201,10 @@ function Settings(props) {
   );
 }
 
-export default Settings;
+const mapStatetoProps = (state) => ({
+  user: state.user,
+});
+
+const mapDispatchtoProps = { changeUserName };
+
+export default connect(mapStatetoProps, mapDispatchtoProps)(Settings);
