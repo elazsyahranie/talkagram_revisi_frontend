@@ -5,7 +5,11 @@ import noProfilePicture from "../img-not-found.png";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faNewspaper } from "@fortawesome/free-solid-svg-icons";
-import { changeUserData, changeUserPassword } from "../../../redux/action/user";
+import {
+  changeUserImage,
+  changeUserData,
+  changeUserPassword,
+} from "../../../redux/action/user";
 import { connect } from "react-redux";
 
 function Settings(props) {
@@ -45,6 +49,33 @@ function Settings(props) {
   const displayUserNameForm = () => {
     setShowUserName(false);
     setShowUserNameForm(true);
+  };
+
+  // USER IMAGE
+  const [userImage, setUserImage] = useState("");
+  const [uploadImageButton, setUploadImageButton] = useState(false);
+  const [uploadImageSuccess, setUploadImageSuccess] = useState(false);
+
+  const handleUpdateImage = (event) => {
+    setUserImage(event.target.files[0]);
+    setUploadImageButton(true);
+  };
+
+  const submitUserImage = (event) => {
+    event.preventDefault();
+    console.log(userImage);
+    console.log("Testing the submitUserImage function");
+    const fd = new FormData();
+    fd.append("image", userImage);
+    props
+      .changeUserImage(fd, props.auth.data.user_id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setUploadImageButton(false);
   };
 
   const handleUserNameChange = (event) => {
@@ -218,13 +249,35 @@ function Settings(props) {
           <Image src={leftArrow} alt="" className={style.hiddenDot} />
         </div>
         <div className="mt-4 d-flex justify-content-center">
-          <Image
-            src={noProfilePicture}
-            alt=""
-            className={style.profilePictureStyling}
-            fluid
-          />
+          <Form>
+            <div className="position-relative">
+              <Form.Group>
+                <Image
+                  src={noProfilePicture}
+                  alt=""
+                  className={style.profilePictureStyling}
+                  fluid
+                />
+                <Form.Label htmlFor="formFile" className={style.boxUpdateImage}>
+                  Jangan di hapus!
+                </Form.Label>
+                <input
+                  type="file"
+                  id="formFile"
+                  onChange={(event) => handleUpdateImage(event)}
+                  className={style.updateImageInputStyling}
+                ></input>
+              </Form.Group>
+            </div>
+          </Form>
         </div>
+        {uploadImageButton && (
+          <div className="mt-2 d-flex justify-content-center">
+            <Button onClick={(event) => submitUserImage(event)}>
+              Upload image
+            </Button>
+          </div>
+        )}
         {showUserName && (
           <div className="mt-4" onClick={() => displayUserNameForm()}>
             <h6 className="text-center">{props.auth.data.user_name}</h6>
@@ -318,6 +371,10 @@ const mapStatetoProps = (state) => ({
   user: state.user,
 });
 
-const mapDispatchtoProps = { changeUserData, changeUserPassword };
+const mapDispatchtoProps = {
+  changeUserImage,
+  changeUserData,
+  changeUserPassword,
+};
 
 export default connect(mapStatetoProps, mapDispatchtoProps)(Settings);

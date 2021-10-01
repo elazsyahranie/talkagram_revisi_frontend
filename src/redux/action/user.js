@@ -7,6 +7,13 @@ export const getUserbyId = (id) => {
   };
 };
 
+export const changeUserImage = (image, id) => {
+  return {
+    type: "UPLOAD_USER_IMAGE",
+    payload: axiosApiIntances.patch(`user/update-image/${id}`, image),
+  };
+};
+
 export const changeUserData = (data, id) => {
   return {
     type: "CHANGE_USER_DATA",

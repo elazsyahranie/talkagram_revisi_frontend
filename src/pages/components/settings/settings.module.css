@@ -38,3 +38,31 @@
 .lowerIcons {
   margin-right: 10px;
 }
+
+/* UPDATE IMAGE FORM STYLING */
+.boxUpdateImage {
+  background-color: transparent;
+  color: transparent;
+  height: 84px;
+  width: 84px;
+  position: absolute;
+  border-radius: 20px;
+  left: 0;
+  right: 0;
+  visibility: visible;
+  cursor: pointer;
+}
+
+.updateImageInputStyling {
+  background-color: rgba(46, 31, 182, 0.6);
+  width: 84px;
+  height: 84px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  border-radius: 20px;
+  visibility: hidden;
+  cursor: pointer;
+}
+/* UPDATE IMAGE FORM STYLING */
