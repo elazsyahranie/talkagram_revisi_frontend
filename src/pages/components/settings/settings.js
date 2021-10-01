@@ -54,8 +54,6 @@ function Settings(props) {
   // USER IMAGE
   const [userImage, setUserImage] = useState("");
   const [uploadImageButton, setUploadImageButton] = useState(false);
-  const [uploadImageSuccess, setUploadImageSuccess] = useState(false);
-
   const handleUpdateImage = (event) => {
     setUserImage(event.target.files[0]);
     setUploadImageButton(true);
@@ -71,6 +69,7 @@ function Settings(props) {
       .changeUserImage(fd, props.auth.data.user_id)
       .then((res) => {
         console.log(res);
+        props.getUserData();
       })
       .catch((err) => {
         console.log(err);
@@ -176,6 +175,8 @@ function Settings(props) {
       });
   };
 
+  console.log(props.auth.data.user_image);
+
   return (
     <>
       <Modal
@@ -252,12 +253,21 @@ function Settings(props) {
           <Form>
             <div className="position-relative">
               <Form.Group>
-                <Image
-                  src={noProfilePicture}
-                  alt=""
-                  className={style.profilePictureStyling}
-                  fluid
-                />
+                {!props.auth.data.user_image ? (
+                  <Image
+                    src={noProfilePicture}
+                    alt=""
+                    className={style.profilePictureStyling}
+                    fluid
+                  />
+                ) : (
+                  <Image
+                    src={`${process.env.REACT_APP_IMAGE_URL}${props.auth.data.user_image}`}
+                    alt=""
+                    className={style.profilePictureStyling}
+                    fluid
+                  />
+                )}
                 <Form.Label htmlFor="formFile" className={style.boxUpdateImage}>
                   Jangan di hapus!
                 </Form.Label>

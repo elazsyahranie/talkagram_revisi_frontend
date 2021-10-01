@@ -11,13 +11,6 @@
   height: 25px;
 }
 
-.profilePictureStyling {
-  height: 84px;
-  width: 84px;
-  border-radius: 20px;
-  object-fit: cover;
-}
-
 .changePasswordModalStyling {
   width: 509px;
 }
@@ -64,5 +57,12 @@
   border-radius: 20px;
   visibility: hidden;
   cursor: pointer;
+}
+
+.profilePictureStyling {
+  height: 84px;
+  width: 84px;
+  border-radius: 20px;
+  object-fit: cover;
 }
 /* UPDATE IMAGE FORM STYLING */

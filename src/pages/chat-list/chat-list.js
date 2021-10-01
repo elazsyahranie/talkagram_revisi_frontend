@@ -28,6 +28,7 @@ import noProfilePicture from "../components/img-not-found.png";
 // COMPONENTS
 import ListRoom from "../components/list-room/list-room";
 import Settings from "../components/settings/settings";
+import Contacts from "../components/contacts/contacts";
 
 function ChatList(props) {
   const [message, setMessage] = useState("");
@@ -45,19 +46,15 @@ function ChatList(props) {
 
   // Modal
   const [showMenuModal, setShowMenuModal] = useState(false);
+  // const [showContactsModal, setShowContactsModal] = useState(false);
 
   const handleClose = () => setShowMenuModal(false);
   const handleShow = () => setShowMenuModal(true);
 
-  // Left Menu
-  const [showListRoom, setShowListRoom] = useState(false);
-  const [showSettings, setShowSetting] = useState(true);
-
-  //Back to Chat
-  const backToChat = () => {
-    setShowListRoom(true);
-    setShowSetting(false);
-  };
+  // Menu Hooks
+  const [displayListRoom, setDisplayListRoom] = useState(true);
+  const [displaySettings, setDisplaySettings] = useState(false);
+  const [displayContacts, setDisplayContacts] = useState(false);
 
   const { user_name, user_id } = props.auth.data;
 
@@ -135,14 +132,25 @@ function ChatList(props) {
   };
 
   // MENU FUNCTIONS //
-  const goToSetting = () => {
-    setShowSetting(true);
-    setShowListRoom(false);
+  const backToChat = () => {
     setShowMenuModal(false);
+    setDisplayListRoom(true);
+    setDisplaySettings(false);
+    setDisplayContacts(false);
+  };
+
+  const goToSetting = () => {
+    setShowMenuModal(false);
+    setDisplayListRoom(false);
+    setDisplaySettings(true);
+    setDisplayContacts(false);
   };
 
   const goToContacts = () => {
-    console.log("Go to contacts");
+    setShowMenuModal(false);
+    setDisplayListRoom(false);
+    setDisplaySettings(false);
+    setDisplayContacts(true);
   };
 
   const goToAddFriends = () => {
@@ -253,7 +261,11 @@ function ChatList(props) {
                 onClick={() => handleShow()}
               />
             </div>
-            {showListRoom && (
+            {/* setShowMenuModal(false);
+    setDisplayListRoom(false);
+    setDisplaySettings(false);
+    setDisplayContacts(true); */}
+            {displayListRoom && (
               <div className="my-3">
                 <ListRoom
                   data={rooms}
@@ -262,7 +274,7 @@ function ChatList(props) {
                 />
               </div>
             )}
-            {showSettings && (
+            {displaySettings && (
               <div className="my-3">
                 <Settings
                   {...props}
@@ -270,6 +282,11 @@ function ChatList(props) {
                   handleLogOut={handleLogOut}
                   getUserData={getUserData}
                 />
+              </div>
+            )}
+            {displayContacts && (
+              <div className="my-3">
+                <Contacts {...props} backToChat={backToChat} />
               </div>
             )}
           </Col>
