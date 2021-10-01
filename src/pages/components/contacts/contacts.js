@@ -1,4 +1,6 @@
 import { Container, Row } from "react-bootstrap";
+import ReactPaginate from "react-paginate";
+import style from "./contacts.module.css";
 
 function Contacts(props) {
   return (
@@ -13,6 +15,19 @@ function Contacts(props) {
               <small>Return to Room List</small>
             </span>
           </div>
+          <ReactPaginate
+            previousLabel={"<<"}
+            nextLabel={">>"}
+            breakLabel={"..."}
+            breakClassName={"break-me"}
+            pageCount={3}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={1}
+            containerClassName={style.pagination}
+            subContainerClassName={`${style.pages} ${style.pagination}`}
+            activeClassName={style.active}
+          />
         </Row>
       </Container>
     </>

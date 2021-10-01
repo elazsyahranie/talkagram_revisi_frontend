@@ -35,6 +35,15 @@ export const getRooms = (id) => {
   };
 };
 
+export const getContactPagination = (id, page, limit, sort, search) => {
+  return {
+    type: "GET_CONTACT_PAGINATION",
+    payload: axiosApiIntances.get(
+      `contact-pagination/${id}?page=${page}&limit=${limit}&sort=${sort}&search=${search}`
+    ),
+  };
+};
+
 export const insertChat = (data) => {
   return {
     type: "INSERT_MESSAGE",
