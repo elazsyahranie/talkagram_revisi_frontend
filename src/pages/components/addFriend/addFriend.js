@@ -28,7 +28,7 @@ function AddFriend(props) {
       });
   };
 
-  // console.log(listOfUsers);
+  console.log(props.listOfContacts);
 
   return (
     <>

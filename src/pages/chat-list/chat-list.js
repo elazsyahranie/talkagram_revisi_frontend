@@ -113,7 +113,13 @@ function ChatList(props) {
     props
       .getContactsDataOnly(user_id)
       .then((res) => {
-        console.log(res.value);
+        const contactIds = res.value.data.data;
+        const contactUserIdMapped = contactIds.map((a) => a.contact_user_id);
+        const contactFriendIdMapped = contactIds.map(
+          (a) => a.contact_friend_id
+        );
+        const concatArrays = contactUserIdMapped.concat(contactFriendIdMapped);
+        setListOfContacts(concatArrays);
       })
       .catch((err) => {
         console.log(err);
@@ -323,7 +329,11 @@ function ChatList(props) {
             )}
             {displayAddFriend && (
               <div className="my-3">
-                <AddFriend {...props} backToChat={backToChat} />
+                <AddFriend
+                  {...props}
+                  backToChat={backToChat}
+                  listOfContacts={listOfContacts}
+                />
               </div>
             )}
           </Col>
