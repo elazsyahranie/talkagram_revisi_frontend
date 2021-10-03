@@ -35,6 +35,13 @@ export const getRooms = (id) => {
   };
 };
 
+export const getContactsKeyword = (keyword) => {
+  return {
+    type: "GET_CONTACTS_KEYWORD",
+    payload: axiosApiIntances.get(`user/keyword?keyword=${keyword}`),
+  };
+};
+
 export const getContactPagination = (id, page, sort, search) => {
   return {
     type: "GET_CONTACT_PAGINATION",

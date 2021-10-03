@@ -1,0 +1,16 @@
+.componentTitleStyling {
+  color: #7e98df;
+  align-items: center;
+}
+
+.shownDot {
+  height: auto;
+}
+
+.hiddenDot {
+  visibility: hidden;
+}
+
+.topFormControl {
+  border-radius: 15px;
+}

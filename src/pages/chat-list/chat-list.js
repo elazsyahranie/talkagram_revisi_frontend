@@ -53,9 +53,10 @@ function ChatList(props) {
   const handleShow = () => setShowMenuModal(true);
 
   // Menu Hooks
-  const [displayListRoom, setDisplayListRoom] = useState(true);
+  const [displayListRoom, setDisplayListRoom] = useState(false);
   const [displaySettings, setDisplaySettings] = useState(false);
   const [displayContacts, setDisplayContacts] = useState(false);
+  const [displayAddFriend, setDisplayAddFriend] = useState(true);
 
   const { user_name, user_id } = props.auth.data;
 
@@ -138,6 +139,7 @@ function ChatList(props) {
     setDisplayListRoom(true);
     setDisplaySettings(false);
     setDisplayContacts(false);
+    setDisplayAddFriend(false);
   };
 
   const goToSetting = () => {
@@ -145,6 +147,7 @@ function ChatList(props) {
     setDisplayListRoom(false);
     setDisplaySettings(true);
     setDisplayContacts(false);
+    setDisplayAddFriend(false);
   };
 
   const goToContacts = () => {
@@ -152,10 +155,15 @@ function ChatList(props) {
     setDisplayListRoom(false);
     setDisplaySettings(false);
     setDisplayContacts(true);
+    setDisplayAddFriend(false);
   };
 
-  const goToAddFriends = () => {
-    console.log("Go to add friends ");
+  const goToAddFriend = () => {
+    setShowMenuModal(false);
+    setDisplayListRoom(false);
+    setDisplaySettings(false);
+    setDisplayContacts(false);
+    setDisplayAddFriend(true);
   };
   // MENU FUNCTIONS //
 
@@ -238,7 +246,11 @@ function ChatList(props) {
             <FontAwesomeIcon icon={faUserFriends} />
             <h5 className="my-auto">Contacts</h5>
           </div>
-          <div className="my-3 d-flex align-items-center">
+          <div
+            className="my-3 d-flex align-items-center"
+            onClick={() => goToAddFriend()}
+            style={{ cursor: "pointer" }}
+          >
             <FontAwesomeIcon icon={faUsers} />
             <h5 className="my-auto">Add Friends</h5>
           </div>
@@ -294,9 +306,11 @@ function ChatList(props) {
                 />
               </div>
             )}
-            <div className="my-3">
-              <AddFriend />
-            </div>
+            {displayAddFriend && (
+              <div className="my-3">
+                <AddFriend {...props} backToChat={backToChat} />
+              </div>
+            )}
           </Col>
           <Col lg={9} md={9} sm={12} xs={12} className={style.chatRoomStyling}>
             {messageInput && (
