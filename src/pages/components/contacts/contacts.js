@@ -1,10 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Container, Row } from "react-bootstrap";
+import { Container, Row, Image } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
 import { useEffect, useState } from "react";
 import { getContactPagination } from "../../../redux/action/user";
 import { connect } from "react-redux";
 import style from "./contacts.module.css";
+
+import noProfilePicture from "../../components/img-not-found.png";
 
 function Contacts(props) {
   const [totalPage, setTotalPage] = useState("");
@@ -19,6 +21,8 @@ function Contacts(props) {
     props
       .getContactPagination(props.auth.data.user_id, page, sort, search)
       .then((res) => {
+        console.log(res.value.data.pagination);
+        setTotalPage(res.value.data.pagination.totalPage);
         setContactList(res.value.data.data);
       })
       .catch((err) => {
@@ -26,7 +30,7 @@ function Contacts(props) {
       });
   }, []);
 
-  // console.log(props.auth.data.user_id);
+  console.log(totalPage);
 
   const pageId = (event) => {
     const selectedPage = event.selected + 1;
@@ -41,7 +45,8 @@ function Contacts(props) {
       });
   };
 
-  // console.log(contactList);
+  console.log(props.userOnline);
+  console.log(typeof props.userOnline);
 
   return (
     <>
@@ -49,7 +54,26 @@ function Contacts(props) {
         <Row>
           {contactList &&
             contactList.map((item, index) => (
-              <p key={index}>{item.user_name}</p>
+              <div
+                className="mb-3 d-flex"
+                key={index}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="d-flex align-items-center">
+                  <Image
+                    src={noProfilePicture}
+                    alt=""
+                    className={style.profilePictureStyling}
+                    fluid
+                  />
+                </div>
+                <div className={`${style.roomUserStyling} my-auto`}>
+                  <h5 key={index}>{item.user_name}</h5>
+                  {props.userOnline.includes(item.user_id) ? (
+                    <h6>Online</h6>
+                  ) : null}
+                </div>
+              </div>
             ))}
           <div className="d-flex justify-content-center">
             <ReactPaginate
@@ -57,7 +81,7 @@ function Contacts(props) {
               nextLabel={">>"}
               breakLabel={"..."}
               breakClassName={"break-me"}
-              pageCount={3}
+              pageCount={totalPage}
               marginPagesDisplayed={2}
               pageRangeDisplayed={5}
               onPageChange={pageId}

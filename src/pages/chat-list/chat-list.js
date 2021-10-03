@@ -29,6 +29,7 @@ import noProfilePicture from "../components/img-not-found.png";
 import ListRoom from "../components/list-room/list-room";
 import Settings from "../components/settings/settings";
 import Contacts from "../components/contacts/contacts";
+import AddFriend from "../components/addFriend/addFriend";
 
 function ChatList(props) {
   const [message, setMessage] = useState("");
@@ -286,9 +287,16 @@ function ChatList(props) {
             )}
             {displayContacts && (
               <div className="my-3">
-                <Contacts {...props} backToChat={backToChat} />
+                <Contacts
+                  {...props}
+                  backToChat={backToChat}
+                  userOnline={userOnline}
+                />
               </div>
             )}
+            <div className="my-3">
+              <AddFriend />
+            </div>
           </Col>
           <Col lg={9} md={9} sm={12} xs={12} className={style.chatRoomStyling}>
             {messageInput && (
