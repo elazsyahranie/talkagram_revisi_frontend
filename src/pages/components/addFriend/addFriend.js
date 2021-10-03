@@ -3,10 +3,10 @@ import { useState } from "react";
 import style from "./addFriend.module.css";
 import leftArrow from "../back.png";
 import noProfilePicture from "../../components/img-not-found.png";
-import { getContactsKeyword } from "../../../redux/action/user";
+import { getContactsKeyword, sendInvitation } from "../../../redux/action/user";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 
 function AddFriend(props) {
   const [keyword, setKeyword] = useState("");
@@ -24,11 +24,32 @@ function AddFriend(props) {
         setListOfUsers(res.value.data.data);
       })
       .catch((err) => {
-        console.log(err.response.data.msg);
+        console.log(err);
       });
   };
 
-  console.log(props.listOfContacts);
+  const submitInvitation = (userIdToInvite) => {
+    // console.log(userIdToInvite);
+    // console.log(props.auth.data.user_id);
+    const setData = {
+      contactUserId: props.auth.data.user_id,
+      contactFriendId: userIdToInvite,
+    };
+    props
+      .sendInvitation(setData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log(setData);
+    console.log("Send invitation works!");
+  };
+
+  const theListofContacts = props.listOfContacts;
+  const theListofRequests = props.listOfFriendRequests;
+  console.log(theListofContacts);
 
   return (
     <>
@@ -71,15 +92,30 @@ function AddFriend(props) {
                 </div>
                 <div className={`${style.roomUserStyling} my-auto`}>
                   <h5>{item.user_name}</h5>
-                  <span
-                    className={`${style.contactStatus} position-relative mx-auto`}
-                  >
-                    <span className="ms-2 me-2 my-1">ContactStatus</span>
-                    <FontAwesomeIcon
-                      icon={faCheckCircle}
-                      className={`${style.alreadyFriends} position-absolute`}
-                    />
-                  </span>
+                  {!theListofContacts.includes(item.user_id) &&
+                  !theListofRequests.includes(item.user_id) ? (
+                    <span
+                      className={`${style.contactStatus} position-relative mx-auto`}
+                      onClick={() => submitInvitation(item.user_id)}
+                    >
+                      <FontAwesomeIcon
+                        icon={faUserPlus}
+                        className={`${style.inviteIconStyling}`}
+                      />
+                      <span className="ms-2 me-2 my-1">Add as Friend</span>
+                    </span>
+                  ) : !theListofContacts.includes(item.user_id) &&
+                    theListofRequests.includes(item.user_id) ? null : null}
+                  {theListofContacts.includes(item.user_id) ? (
+                    <span>
+                      <i>Friends</i>
+                    </span>
+                  ) : null}
+                  {theListofRequests.includes(item.user_id) ? (
+                    <span>
+                      <i>Requested</i>
+                    </span>
+                  ) : null}
                 </div>
               </div>
             ))
@@ -95,6 +131,7 @@ const mapStatetoProps = (state) => ({
 
 const mapDispatchtoProps = {
   getContactsKeyword,
+  sendInvitation,
 };
 
 export default connect(mapStatetoProps, mapDispatchtoProps)(AddFriend);

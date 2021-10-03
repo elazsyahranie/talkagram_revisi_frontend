@@ -49,6 +49,20 @@ export const getContactsKeyword = (keyword) => {
   };
 };
 
+export const getFriendRequest = (id) => {
+  return {
+    type: "GET_FRIEND_REQUEST",
+    payload: axiosApiIntances.get(`user/friend-request/${id}`),
+  };
+};
+
+export const sendInvitation = (setData) => {
+  return {
+    type: "SEND_INVITATION",
+    payload: axiosApiIntances.post(`user/send-friend-request`, setData),
+  };
+};
+
 export const getContactPagination = (id, page, sort, search) => {
   return {
     type: "GET_CONTACT_PAGINATION",

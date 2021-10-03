@@ -45,6 +45,8 @@ function Contacts(props) {
       });
   };
 
+  console.log(contactList);
+
   console.log(props.userOnline);
   console.log(typeof props.userOnline);
 
@@ -75,21 +77,23 @@ function Contacts(props) {
                 </div>
               </div>
             ))}
-          <div className="d-flex justify-content-center">
-            <ReactPaginate
-              previousLabel={"<<"}
-              nextLabel={">>"}
-              breakLabel={"..."}
-              breakClassName={"break-me"}
-              pageCount={totalPage}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={5}
-              onPageChange={pageId}
-              containerClassName={style.pagination}
-              subContainerClassName={`${style.pages} ${style.pagination}`}
-              activeClassName={style.active}
-            />
-          </div>
+          {contactList && (
+            <div className="d-flex justify-content-center">
+              <ReactPaginate
+                previousLabel={"<<"}
+                nextLabel={">>"}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                pageCount={totalPage}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={pageId}
+                containerClassName={style.pagination}
+                subContainerClassName={`${style.pages} ${style.pagination}`}
+                activeClassName={style.active}
+              />
+            </div>
+          )}
           <div className="d-flex justify-content-center">
             <span
               onClick={() => props.backToChat()}

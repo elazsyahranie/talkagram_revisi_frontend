@@ -26,15 +26,16 @@
 .contactStatus {
   border: 1px solid #000;
   border-radius: 20px;
+  padding-left: 9px;
+  padding-right: 9px;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
-.alreadyFriends {
-  color: green;
+.inviteFriendStyling {
   background-color: white;
   border-radius: 50%;
   border: 2px solid white;
-  bottom: 10px;
-  left: 118px;
 }
 
 .topFormControl {

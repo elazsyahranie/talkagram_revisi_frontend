@@ -14,6 +14,7 @@ import {
   getRooms,
   insertChat,
   chatHistory,
+  getFriendRequest,
   getContactsDataOnly,
 } from "../../redux/action/user";
 import { getUserbyId } from "../../redux/action/auth";
@@ -50,7 +51,8 @@ function ChatList(props) {
     show: false,
   });
 
-  const [listOfContacts, setListOfContacts] = useState();
+  const [listOfFriendRequests, setListOfFriendRequests] = useState([]);
+  const [listOfContacts, setListOfContacts] = useState([]);
 
   // Modal
   const [showMenuModal, setShowMenuModal] = useState(false);
@@ -78,6 +80,7 @@ function ChatList(props) {
     }
     getContactsWithoutUser();
     getDataofRooms();
+    getFriendRequestLists();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.socket, messages, user_id]);
 
@@ -125,6 +128,22 @@ function ChatList(props) {
         console.log(err);
       });
   };
+
+  const getFriendRequestLists = () => {
+    props
+      .getFriendRequest(user_id)
+      .then((res) => {
+        const requestId = res.value.data.data;
+        const requestIdMapped = requestId.map((a) => a.contact_friend_id);
+        // console.log(res.value.data.data);
+        setListOfFriendRequests(requestIdMapped);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  console.log(listOfFriendRequests);
 
   const getDataofRooms = () => {
     props
@@ -333,6 +352,7 @@ function ChatList(props) {
                   {...props}
                   backToChat={backToChat}
                   listOfContacts={listOfContacts}
+                  listOfFriendRequests={listOfFriendRequests}
                 />
               </div>
             )}
@@ -435,6 +455,7 @@ const mapDispatchToProps = {
   insertChat,
   chatHistory,
   getUserbyId,
+  getFriendRequest,
   getContactsDataOnly,
 };
 
