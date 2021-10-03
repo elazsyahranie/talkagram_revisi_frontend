@@ -35,6 +35,13 @@ export const getRooms = (id) => {
   };
 };
 
+export const getContactsDataOnly = (id) => {
+  return {
+    type: "GET_CONTACTS_DATA_ONLY",
+    payload: axiosApiIntances.get(`user/contact-data-only/${id}`),
+  };
+};
+
 export const getContactsKeyword = (keyword) => {
   return {
     type: "GET_CONTACTS_KEYWORD",

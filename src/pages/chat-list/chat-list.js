@@ -10,7 +10,12 @@ import {
 } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
-import { getRooms, insertChat, chatHistory } from "../../redux/action/user";
+import {
+  getRooms,
+  insertChat,
+  chatHistory,
+  getContactsDataOnly,
+} from "../../redux/action/user";
 import { getUserbyId } from "../../redux/action/auth";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -45,6 +50,8 @@ function ChatList(props) {
     show: false,
   });
 
+  const [listOfContacts, setListOfContacts] = useState();
+
   // Modal
   const [showMenuModal, setShowMenuModal] = useState(false);
   // const [showContactsModal, setShowContactsModal] = useState(false);
@@ -53,10 +60,10 @@ function ChatList(props) {
   const handleShow = () => setShowMenuModal(true);
 
   // Menu Hooks
-  const [displayListRoom, setDisplayListRoom] = useState(false);
+  const [displayListRoom, setDisplayListRoom] = useState(true);
   const [displaySettings, setDisplaySettings] = useState(false);
   const [displayContacts, setDisplayContacts] = useState(false);
-  const [displayAddFriend, setDisplayAddFriend] = useState(true);
+  const [displayAddFriend, setDisplayAddFriend] = useState(false);
 
   const { user_name, user_id } = props.auth.data;
 
@@ -69,7 +76,7 @@ function ChatList(props) {
       });
       connect();
     }
-
+    getContactsWithoutUser();
     getDataofRooms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.socket, messages, user_id]);
@@ -102,10 +109,18 @@ function ChatList(props) {
     });
   };
 
-  // console.log(userOnline);
+  const getContactsWithoutUser = () => {
+    props
+      .getContactsDataOnly(user_id)
+      .then((res) => {
+        console.log(res.value);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const getDataofRooms = () => {
-    // console.log(user_id);
     props
       .getRooms(user_id)
       .then((res) => {
@@ -405,6 +420,12 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
   user: state.user,
 });
-const mapDispatchToProps = { getRooms, insertChat, chatHistory, getUserbyId };
+const mapDispatchToProps = {
+  getRooms,
+  insertChat,
+  chatHistory,
+  getUserbyId,
+  getContactsDataOnly,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);

@@ -1,9 +1,12 @@
-import { Form, Image, Modal } from "react-bootstrap";
+import { Form, Image } from "react-bootstrap";
 import { useState } from "react";
 import style from "./addFriend.module.css";
 import leftArrow from "../back.png";
+import noProfilePicture from "../../components/img-not-found.png";
 import { getContactsKeyword } from "../../../redux/action/user";
 import { connect } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
 function AddFriend(props) {
   const [keyword, setKeyword] = useState("");
@@ -25,7 +28,7 @@ function AddFriend(props) {
       });
   };
 
-  console.log(listOfUsers);
+  // console.log(listOfUsers);
 
   return (
     <>
@@ -51,8 +54,36 @@ function AddFriend(props) {
         ></Form.Control>
       </Form>
       <div>
-        {listOfUsers.length > 0 &&
-          listOfUsers.map((item, index) => <p key={index}>{item.user_name}</p>)}
+        {listOfUsers
+          ? listOfUsers.map((item, index) => (
+              <div
+                className="mb-3 d-flex"
+                key={index}
+                style={{ cursor: "pointer" }}
+              >
+                <div>
+                  <Image
+                    src={noProfilePicture}
+                    alt=""
+                    className={style.profilePictureStyling}
+                    fluid
+                  />
+                </div>
+                <div className={`${style.roomUserStyling} my-auto`}>
+                  <h5>{item.user_name}</h5>
+                  <span
+                    className={`${style.contactStatus} position-relative mx-auto`}
+                  >
+                    <span className="ms-2 me-2 my-1">ContactStatus</span>
+                    <FontAwesomeIcon
+                      icon={faCheckCircle}
+                      className={`${style.alreadyFriends} position-absolute`}
+                    />
+                  </span>
+                </div>
+              </div>
+            ))
+          : null}
       </div>
     </>
   );

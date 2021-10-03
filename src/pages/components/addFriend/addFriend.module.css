@@ -3,12 +3,38 @@
   align-items: center;
 }
 
+.profilePictureStyling {
+  height: 64px;
+  width: 64px;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
 .shownDot {
   height: auto;
 }
 
 .hiddenDot {
   visibility: hidden;
+}
+
+.roomUserStyling {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+
+.contactStatus {
+  border: 1px solid #000;
+  border-radius: 20px;
+}
+
+.alreadyFriends {
+  color: green;
+  background-color: white;
+  border-radius: 50%;
+  border: 2px solid white;
+  bottom: 10px;
+  left: 118px;
 }
 
 .topFormControl {
