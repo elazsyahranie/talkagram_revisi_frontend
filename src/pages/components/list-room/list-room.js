@@ -1,4 +1,4 @@
-import { Image } from "react-bootstrap";
+import { Image, Form } from "react-bootstrap";
 import style from "./list-room.module.css";
 import noProfilePicture from "../../components/img-not-found.png";
 
@@ -6,6 +6,12 @@ function ListRoom(rooms) {
   // console.log(rooms.data);
   return (
     <>
+      <Form className="mb-3">
+        <Form.Control
+          type="text"
+          className={style.topFormControl}
+        ></Form.Control>
+      </Form>
       {rooms.data.length > 0 ? (
         rooms.data.map((item, index) => (
           <div

@@ -16,41 +16,41 @@ function Contacts(props) {
   const [contactList, setContactList] = useState();
 
   useEffect(() => {
-    // props
-    //   .getContactPagination(props.auth.data.user_id, page, sort, search)
-    //   .then((res) => {
-    //     setContactList(res.value.data.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    props
+      .getContactPagination(props.auth.data.user_id, page, sort, search)
+      .then((res) => {
+        setContactList(res.value.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   // console.log(props.auth.data.user_id);
 
   const pageId = (event) => {
     const selectedPage = event.selected + 1;
-    // setPage(selectedPage);
-    // props
-    //   .getContactPagination(props.auth.data.user_id, selectedPage, sort, search)
-    //   .then((res) => {
-    //     setContactList(res.value.data.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    setPage(selectedPage);
+    props
+      .getContactPagination(props.auth.data.user_id, selectedPage, sort, search)
+      .then((res) => {
+        setContactList(res.value.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  console.log(contactList);
+  // console.log(contactList);
 
   return (
     <>
       <Container>
         <Row>
-          {/* {contactList &&
+          {contactList &&
             contactList.map((item, index) => (
               <p key={index}>{item.user_name}</p>
-            ))} */}
+            ))}
           <div className="d-flex justify-content-center">
             <ReactPaginate
               previousLabel={"<<"}

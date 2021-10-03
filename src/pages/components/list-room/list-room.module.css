@@ -5,6 +5,10 @@
   object-fit: cover;
 }
 
+.topFormControl {
+  border-radius: 15px;
+}
+
 .roomUserStyling {
   margin-left: 6px;
   margin-right: 6px;

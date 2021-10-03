@@ -52,9 +52,9 @@ function ChatList(props) {
   const handleShow = () => setShowMenuModal(true);
 
   // Menu Hooks
-  const [displayListRoom, setDisplayListRoom] = useState(false);
+  const [displayListRoom, setDisplayListRoom] = useState(true);
   const [displaySettings, setDisplaySettings] = useState(false);
-  const [displayContacts, setDisplayContacts] = useState(true);
+  const [displayContacts, setDisplayContacts] = useState(false);
 
   const { user_name, user_id } = props.auth.data;
 
