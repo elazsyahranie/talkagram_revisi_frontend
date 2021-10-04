@@ -3,7 +3,11 @@ import { useState } from "react";
 import style from "./addFriend.module.css";
 import leftArrow from "../back.png";
 import noProfilePicture from "../../components/img-not-found.png";
-import { getContactsKeyword, sendInvitation } from "../../../redux/action/user";
+import {
+  getContactsKeyword,
+  sendInvitation,
+  confirmRequest,
+} from "../../../redux/action/user";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
@@ -43,13 +47,27 @@ function AddFriend(props) {
       .catch((err) => {
         console.log(err);
       });
-    console.log(setData);
-    console.log("Send invitation works!");
+  };
+
+  const confirmFriendRequest = (friendId) => {
+    const setData = {
+      contactUserId: friendId,
+      contactFriendId: props.auth.data.user_id,
+    };
+    props
+      .confirmRequest(setData)
+      .then(() => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const theListofContacts = props.listOfContacts;
   const theListofRequests = props.listOfFriendRequests;
-  console.log(theListofContacts);
+  const theListofPendingRequests = props.listOfPendingRequests;
+  console.log(theListofPendingRequests);
 
   return (
     <>
@@ -93,7 +111,8 @@ function AddFriend(props) {
                 <div className={`${style.roomUserStyling} my-auto`}>
                   <h5>{item.user_name}</h5>
                   {!theListofContacts.includes(item.user_id) &&
-                  !theListofRequests.includes(item.user_id) ? (
+                  !theListofRequests.includes(item.user_id) &&
+                  !theListofPendingRequests.includes(item.user_id) ? (
                     <span
                       className={`${style.contactStatus} position-relative mx-auto`}
                       onClick={() => submitInvitation(item.user_id)}
@@ -111,9 +130,23 @@ function AddFriend(props) {
                       <i>Friends</i>
                     </span>
                   ) : null}
-                  {theListofRequests.includes(item.user_id) ? (
+                  {theListofRequests.includes(item.user_id) &&
+                  !theListofPendingRequests.includes(item.user_id) ? (
                     <span>
                       <i>Requested</i>
+                    </span>
+                  ) : !theListofRequests.includes(item.user_id) &&
+                    theListofPendingRequests.includes(
+                      item.user_id
+                    ) ? null : null}
+                  {theListofPendingRequests.includes(item.user_id) ? (
+                    <span
+                      className={`${style.confirmRequestStatus} position-relative mx-auto`}
+                      onClick={() => confirmFriendRequest(item.user_id)}
+                    >
+                      <span className="ms-2 me-2 my-1">
+                        <i>Confirm Requests</i>
+                      </span>
                     </span>
                   ) : null}
                 </div>
@@ -132,6 +165,7 @@ const mapStatetoProps = (state) => ({
 const mapDispatchtoProps = {
   getContactsKeyword,
   sendInvitation,
+  confirmRequest,
 };
 
 export default connect(mapStatetoProps, mapDispatchtoProps)(AddFriend);

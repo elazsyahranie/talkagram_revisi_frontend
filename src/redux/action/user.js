@@ -56,10 +56,24 @@ export const getFriendRequest = (id) => {
   };
 };
 
+export const getPendingRequest = (id) => {
+  return {
+    type: "GET_PENDING_REQUEST",
+    payload: axiosApiIntances.get(`user/pending-request/${id}`),
+  };
+};
+
 export const sendInvitation = (setData) => {
   return {
     type: "SEND_INVITATION",
     payload: axiosApiIntances.post(`user/send-friend-request`, setData),
+  };
+};
+
+export const confirmRequest = (setData) => {
+  return {
+    type: "CONFIRM_REQUEST",
+    payload: axiosApiIntances.post(`user/confirm-friend-request`, setData),
   };
 };
 

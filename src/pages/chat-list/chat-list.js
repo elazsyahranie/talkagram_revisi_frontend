@@ -15,6 +15,7 @@ import {
   insertChat,
   chatHistory,
   getFriendRequest,
+  getPendingRequest,
   getContactsDataOnly,
 } from "../../redux/action/user";
 import { getUserbyId } from "../../redux/action/auth";
@@ -52,6 +53,7 @@ function ChatList(props) {
   });
 
   const [listOfFriendRequests, setListOfFriendRequests] = useState([]);
+  const [listOfPendingRequests, setListOfPendingRequests] = useState([]);
   const [listOfContacts, setListOfContacts] = useState([]);
 
   // Modal
@@ -81,6 +83,7 @@ function ChatList(props) {
     getContactsWithoutUser();
     getDataofRooms();
     getFriendRequestLists();
+    getPendingRequestLists();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.socket, messages, user_id]);
 
@@ -134,7 +137,7 @@ function ChatList(props) {
       .getFriendRequest(user_id)
       .then((res) => {
         const requestId = res.value.data.data;
-        const requestIdMapped = requestId.map((a) => a.contact_friend_id);
+        const requestIdMapped = requestId.map((a) => a.contact_user_id);
         // console.log(res.value.data.data);
         setListOfFriendRequests(requestIdMapped);
       })
@@ -143,7 +146,19 @@ function ChatList(props) {
       });
   };
 
-  console.log(listOfFriendRequests);
+  const getPendingRequestLists = () => {
+    props
+      .getPendingRequest(user_id)
+      .then((res) => {
+        // console.log(res.value.data.data);
+        const pendingId = res.value.data.data;
+        const pendingMapped = pendingId.map((a) => a.contact_user_id);
+        setListOfPendingRequests(pendingMapped);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const getDataofRooms = () => {
     props
@@ -155,8 +170,6 @@ function ChatList(props) {
         console.log(err);
       });
   };
-
-  // console.log(props.auth.data);
 
   const getChatHistory = (room_chat) => {
     props
@@ -353,6 +366,7 @@ function ChatList(props) {
                   backToChat={backToChat}
                   listOfContacts={listOfContacts}
                   listOfFriendRequests={listOfFriendRequests}
+                  listOfPendingRequests={listOfPendingRequests}
                 />
               </div>
             )}
@@ -456,6 +470,7 @@ const mapDispatchToProps = {
   chatHistory,
   getUserbyId,
   getFriendRequest,
+  getPendingRequest,
   getContactsDataOnly,
 };
 

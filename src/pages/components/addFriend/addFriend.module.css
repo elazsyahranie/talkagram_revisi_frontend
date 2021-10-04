@@ -32,6 +32,20 @@
   padding-bottom: 4px;
 }
 
+.confirmRequestStatus {
+  border: 1px solid #000;
+  border-radius: 20px;
+  padding-left: 9px;
+  padding-right: 9px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.confirmRequestStatus:hover {
+  border: 1px solid #a2b7f0;
+  background-color: #a2b7f0;
+}
+
 .inviteFriendStyling {
   background-color: white;
   border-radius: 50%;
