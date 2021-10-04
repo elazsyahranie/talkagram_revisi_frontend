@@ -87,6 +87,8 @@ function ChatList(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.socket, messages, user_id]);
 
+  console.log(notif);
+
   const getUserData = () => {
     // console.log("Testing the getUserData function");
     props
@@ -244,6 +246,7 @@ function ChatList(props) {
       const data = {
         roomChat: room.new,
         senderId: user_id,
+        userName: user_name,
         receiverId: receiver,
         chatMessage: message,
         show: true,
@@ -451,9 +454,9 @@ function ChatList(props) {
               className="rounded me-1"
               alt=""
             />
-            <h6 className="fw-bold mx-auto">{notif.senderId}</h6>
+            <h6 className="fw-bold mx-auto">{notif.userName}</h6>
           </Toast.Header>
-          <Toast.Body>See? Just like this.</Toast.Body>
+          <Toast.Body>{notif.chatMessage}</Toast.Body>
         </Toast>
       </Container>
     </>
