@@ -11,7 +11,9 @@ import noProfilePicture from "../../components/img-not-found.png";
 function Contacts(props) {
   const [totalPage, setTotalPage] = useState("");
   const [page, setPage] = useState(1);
+  // eslint-disable-next-line
   const [sort, setSort] = useState("user_id ASC");
+  // eslint-disable-next-line
   const [search, setSearch] = useState("");
 
   // CONTACT HOOKS
