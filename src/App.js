@@ -15,7 +15,7 @@ import io from "socket.io-client";
 function App() {
   const [socket, setSocket] = useState(null);
   const setUpSocket = () => {
-    const newSocket = io.connect("http://localhost:3007", {
+    const newSocket = io.connect("https://talkagram-backend.herokuapp.com", {
       path: "/backend3/socket.io",
     });
     newSocket.on("connect", () => {

@@ -45,11 +45,6 @@ function Contacts(props) {
       });
   };
 
-  console.log(contactList);
-
-  console.log(props.userOnline);
-  console.log(typeof props.userOnline);
-
   return (
     <>
       <Container>
