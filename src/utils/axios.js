@@ -34,7 +34,7 @@ axiosApiIntances.interceptors.response.use(
         const refreshToken = localStorage.getItem("refreshToken");
         console.log(refreshToken);
         axiosApiIntances
-          .post("/refresh", { refreshToken })
+          .post("auth/refresh", { refreshToken })
           .then((res) => {
             console.log(res);
           })
