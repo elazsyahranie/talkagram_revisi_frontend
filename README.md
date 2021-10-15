@@ -1,6 +1,13 @@
-# Getting Started with Create React App
+<h1 align="center">React JS - Talkagram</h1>
+  <p align="center">
+    <a href="https://jualkarcis.netlify.app/">View Demo</a>
+    ·
+    <a href="https://github.com/elazsyahranie/jualkarcis_revisi_frontend/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/elazsyahranie/jualkarcis_revisi_frontend/pulls">Request Feature</a>
+  </p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![Image Banner](src/pages/components/talkagram_preview.jpg)
 
 ## Available Scripts
 
