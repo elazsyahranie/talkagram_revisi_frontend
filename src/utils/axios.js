@@ -42,8 +42,9 @@ axiosApiIntances.interceptors.response.use(
             console.log(err);
           });
       } else {
-        localStorage.clear();
-        window.location.href = "/login";
+        console.log("403 status error jwt expired");
+        // localStorage.clear();
+        // window.location.href = "/login";
       }
     }
     return Promise.reject(error);
