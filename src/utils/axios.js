@@ -33,11 +33,14 @@ axiosApiIntances.interceptors.response.use(
       // console.log(error.response.data.msg);
       if (error.response.data.msg === "jwt expired") {
         const refreshToken = localStorage.getItem("refreshToken");
-        console.log(refreshToken);
         axiosApiIntances
           .post("auth/refresh", { refreshToken })
           .then((res) => {
-            console.log(res);
+            localStorage.setItem("token", res.data.data.token);
+            // Harus di reload suapaya request seperti request yang dimasukkan ke useEffect
+            // atau componentDidMount bisa berfungsi lagi
+            window.location.reload();
+            // console.log(res);
           })
           .catch((err) => {
             console.log(err);
