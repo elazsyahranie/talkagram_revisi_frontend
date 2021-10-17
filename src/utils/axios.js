@@ -45,11 +45,10 @@ axiosApiIntances.interceptors.response.use(
           .catch((err) => {
             console.log(err);
           });
+      } else {
+        localStorage.clear();
+        window.location.href = "/login";
       }
-      // else {
-      //   localStorage.clear();
-      //   window.location.href = "/login";
-      // }
     }
     return Promise.reject(error);
   }
