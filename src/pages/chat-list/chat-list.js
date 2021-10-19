@@ -69,6 +69,9 @@ function ChatList(props) {
   const [displayContacts, setDisplayContacts] = useState(false);
   const [displayAddFriend, setDisplayAddFriend] = useState(false);
 
+  // Chat Menu Hooks
+  const [displayChatSettings, setDisplayChatSettings] = useState(false);
+
   const { user_name, user_id } = props.auth.data;
 
   const userId = props.auth.data.user_id;
@@ -188,6 +191,10 @@ function ChatList(props) {
     setMessage(event.target.value);
   };
 
+  const showChatMenus = () => {
+    setDisplayChatSettings(true);
+  };
+
   // MENU FUNCTIONS //
   const backToChat = () => {
     setShowMenuModal(false);
@@ -221,6 +228,10 @@ function ChatList(props) {
     setDisplayAddFriend(true);
   };
   // MENU FUNCTIONS //
+
+  // CHAT MENU FUNCTION //
+
+  // CHAT MENU FUNCTION //
 
   const selectRoom = (room_chat, user_id, user_name) => {
     setMessageInput(true);
@@ -423,19 +434,24 @@ function ChatList(props) {
               chatHistory.map((item, index) => (
                 <div key={index}>
                   <Container>
-                    <p>
-                      <strong>{item.user_name}: </strong>
-                      {item.message}
-                    </p>
+                    <div key={index} onMouseOver={() => showChatMenus()}>
+                      <p>
+                        <strong>{item.user_name}: </strong>
+                        {item.message}
+                        <span className="ms-2">Testing</span>
+                      </p>
+                    </div>
                   </Container>
                 </div>
               ))}
             <Container className={style.chatMessagesContainer}>
               <div className={style.chatMessagesInnerContainer}>
                 {messages.map((item, index) => (
-                  <p key={index}>
-                    <strong>{item.user_name}: </strong> {item.message}
-                  </p>
+                  <div key={index} className={style.chatMessagesSettingStyling}>
+                    <p>
+                      <strong>{item.user_name}: </strong> {item.message}
+                    </p>
+                  </div>
                 ))}
               </div>
             </Container>
