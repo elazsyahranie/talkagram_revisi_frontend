@@ -86,11 +86,13 @@ body {
 }
 
 .chatMessagesSettingStyling {
-  background-color: transparent;
+  display: block;
+  /* background-color: transparent; */
 }
 
 .chatMessagesSettingStylingHover {
-  background-color: rgba(126, 152, 223, 0.4);
+  display: none;
+  /* background-color: rgba(126, 152, 223, 0.4); */
 }
 
 .roomChatSelect {

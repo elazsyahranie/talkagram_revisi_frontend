@@ -87,8 +87,6 @@ function ChatList(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.socket, messages, user_id]);
 
-  console.log(notif);
-
   const getUserData = () => {
     // console.log("Testing the getUserData function");
     props
@@ -102,8 +100,6 @@ function ChatList(props) {
         console.log(err);
       });
   };
-
-  // console.log(userData);
 
   const connect = () => {
     props.socket.emit("connect-server", userId);
@@ -222,8 +218,14 @@ function ChatList(props) {
   };
   // MENU FUNCTIONS //
 
-  // CHAT MENU FUNCTION //
+  // Edit and Delete Chat Hooks
+  const [hover, setHover] = useState();
+  // this.setState({ hover: {...this.state.hover, i: false }})
 
+  // CHAT MENU FUNCTION //
+  const showEditandDelete = (index) => {
+    setHover(index);
+  };
   // CHAT MENU FUNCTION //
 
   const selectRoom = (room_chat, user_id, user_name) => {
@@ -426,10 +428,22 @@ function ChatList(props) {
             {chatHistory &&
               chatHistory.map((item, index) => {
                 return (
-                  <Container key={index}>
+                  <Container
+                    key={index}
+                    onClick={() => showEditandDelete(index)}
+                  >
                     <p>
                       <strong>{item.user_name}: </strong>
                       {item.message}
+                      <span
+                        className={
+                          hover === index
+                            ? style.chatMessagesSettingStyling
+                            : style.chatMessagesSettingStylingHover
+                        }
+                      >
+                        Testing
+                      </span>
                     </p>
                   </Container>
                 );
