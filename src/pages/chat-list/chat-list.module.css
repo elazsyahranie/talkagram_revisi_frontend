@@ -86,7 +86,7 @@ body {
 }
 
 .chatMessagesSettingStyling {
-  display: block;
+  display: inline;
   /* background-color: transparent; */
 }
 

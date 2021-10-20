@@ -26,6 +26,8 @@ import {
   faCog,
   faUserFriends,
   faUsers,
+  faPencilAlt,
+  faTrashAlt,
   faQuestionCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -219,12 +221,24 @@ function ChatList(props) {
   // MENU FUNCTIONS //
 
   // Edit and Delete Chat Hooks
-  const [hover, setHover] = useState();
+  const [showChatSettings, setShowChatSettings] = useState("");
   // this.setState({ hover: {...this.state.hover, i: false }})
 
   // CHAT MENU FUNCTION //
   const showEditandDelete = (index) => {
-    setHover(index);
+    setShowChatSettings(index);
+  };
+
+  const hideEditandDelete = () => {
+    setShowChatSettings("");
+  };
+
+  const editChatHandle = () => {
+    console.log("Edit chat succesful!");
+  };
+
+  const deleteChatHandle = () => {
+    console.log("Delete chat succesful!");
   };
   // CHAT MENU FUNCTION //
 
@@ -430,19 +444,34 @@ function ChatList(props) {
                 return (
                   <Container
                     key={index}
-                    onClick={() => showEditandDelete(index)}
+                    onMouseEnter={() => showEditandDelete(index)}
+                    onMouseLeave={() => hideEditandDelete()}
+                    style={{ cursor: "pointer" }}
                   >
                     <p>
                       <strong>{item.user_name}: </strong>
                       {item.message}
                       <span
                         className={
-                          hover === index
+                          showChatSettings === index
                             ? style.chatMessagesSettingStyling
                             : style.chatMessagesSettingStylingHover
                         }
                       >
-                        Testing
+                        <span className="mx-3">
+                          <FontAwesomeIcon
+                            icon={faPencilAlt}
+                            title="Edit chat"
+                            onClick={() => editChatHandle()}
+                          />
+                        </span>
+                        <span>
+                          <FontAwesomeIcon
+                            icon={faTrashAlt}
+                            title="Delete chat"
+                            onClick={() => deleteChatHandle()}
+                          />
+                        </span>
                       </span>
                     </p>
                   </Container>
