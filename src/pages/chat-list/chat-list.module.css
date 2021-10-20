@@ -85,6 +85,16 @@ body {
   padding-top: 10px !important;
 }
 
+.chatMessagesSettingStyling {
+  display: inline;
+  /* background-color: transparent; */
+}
+
+.chatMessagesSettingStylingHover {
+  display: none;
+  /* background-color: rgba(126, 152, 223, 0.4); */
+}
+
 .roomChatSelect {
   width: 260px;
 }

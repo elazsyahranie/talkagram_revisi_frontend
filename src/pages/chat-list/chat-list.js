@@ -26,6 +26,8 @@ import {
   faCog,
   faUserFriends,
   faUsers,
+  faPencilAlt,
+  faTrashAlt,
   faQuestionCircle,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -87,8 +89,6 @@ function ChatList(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.socket, messages, user_id]);
 
-  console.log(notif);
-
   const getUserData = () => {
     // console.log("Testing the getUserData function");
     props
@@ -102,8 +102,6 @@ function ChatList(props) {
         console.log(err);
       });
   };
-
-  // console.log(userData);
 
   const connect = () => {
     props.socket.emit("connect-server", userId);
@@ -221,6 +219,28 @@ function ChatList(props) {
     setDisplayAddFriend(true);
   };
   // MENU FUNCTIONS //
+
+  // Edit and Delete Chat Hooks
+  const [showChatSettings, setShowChatSettings] = useState("");
+  // this.setState({ hover: {...this.state.hover, i: false }})
+
+  // CHAT MENU FUNCTION //
+  const showEditandDelete = (index) => {
+    setShowChatSettings(index);
+  };
+
+  const hideEditandDelete = () => {
+    setShowChatSettings("");
+  };
+
+  const editChatHandle = () => {
+    console.log("Edit chat succesful!");
+  };
+
+  const deleteChatHandle = () => {
+    console.log("Delete chat succesful!");
+  };
+  // CHAT MENU FUNCTION //
 
   const selectRoom = (room_chat, user_id, user_name) => {
     setMessageInput(true);
@@ -420,22 +440,51 @@ function ChatList(props) {
               <p>Please select a chat to start messaging</p>
             </div>
             {chatHistory &&
-              chatHistory.map((item, index) => (
-                <div key={index}>
-                  <Container>
+              chatHistory.map((item, index) => {
+                return (
+                  <Container
+                    key={index}
+                    onMouseEnter={() => showEditandDelete(index)}
+                    onMouseLeave={() => hideEditandDelete()}
+                    style={{ cursor: "pointer" }}
+                  >
                     <p>
                       <strong>{item.user_name}: </strong>
                       {item.message}
+                      <span
+                        className={
+                          showChatSettings === index
+                            ? style.chatMessagesSettingStyling
+                            : style.chatMessagesSettingStylingHover
+                        }
+                      >
+                        <span className="mx-3">
+                          <FontAwesomeIcon
+                            icon={faPencilAlt}
+                            title="Edit chat"
+                            onClick={() => editChatHandle()}
+                          />
+                        </span>
+                        <span>
+                          <FontAwesomeIcon
+                            icon={faTrashAlt}
+                            title="Delete chat"
+                            onClick={() => deleteChatHandle()}
+                          />
+                        </span>
+                      </span>
                     </p>
                   </Container>
-                </div>
-              ))}
+                );
+              })}
             <Container className={style.chatMessagesContainer}>
               <div className={style.chatMessagesInnerContainer}>
                 {messages.map((item, index) => (
-                  <p key={index}>
-                    <strong>{item.user_name}: </strong> {item.message}
-                  </p>
+                  <div key={index} className={style.chatMessagesSettingStyling}>
+                    <p>
+                      <strong>{item.user_name}: </strong> {item.message}
+                    </p>
+                  </div>
                 ))}
               </div>
             </Container>
