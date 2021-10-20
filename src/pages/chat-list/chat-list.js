@@ -454,8 +454,8 @@ function ChatList(props) {
                       <span
                         className={
                           showChatSettings === index
-                            ? style.chatMessagesSettingStyling
-                            : style.chatMessagesSettingStylingHover
+                            ? style.chatMessagesSettingStylingDisplay
+                            : style.chatMessagesSettingStylingHide
                         }
                       >
                         <span className="mx-3">

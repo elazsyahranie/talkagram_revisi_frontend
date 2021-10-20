@@ -85,12 +85,12 @@ body {
   padding-top: 10px !important;
 }
 
-.chatMessagesSettingStyling {
+.chatMessagesSettingDisplay {
   display: inline;
   /* background-color: transparent; */
 }
 
-.chatMessagesSettingStylingHover {
+.chatMessagesSettingStylingHide {
   display: none;
   /* background-color: rgba(126, 152, 223, 0.4); */
 }
