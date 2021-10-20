@@ -89,7 +89,7 @@ body {
   background-color: transparent;
 }
 
-.chatMessagesSettingStyling:hover {
+.chatMessagesSettingStylingHover {
   background-color: rgba(126, 152, 223, 0.4);
 }
 

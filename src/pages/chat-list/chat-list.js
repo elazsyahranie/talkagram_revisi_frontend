@@ -69,9 +69,6 @@ function ChatList(props) {
   const [displayContacts, setDisplayContacts] = useState(false);
   const [displayAddFriend, setDisplayAddFriend] = useState(false);
 
-  // Chat Menu Hooks
-  const [displayChatSettings, setDisplayChatSettings] = useState(false);
-
   const { user_name, user_id } = props.auth.data;
 
   const userId = props.auth.data.user_id;
@@ -189,10 +186,6 @@ function ChatList(props) {
 
   const handleChatMessage = (event) => {
     setMessage(event.target.value);
-  };
-
-  const showChatMenus = () => {
-    setDisplayChatSettings(true);
   };
 
   // MENU FUNCTIONS //
@@ -431,19 +424,16 @@ function ChatList(props) {
               <p>Please select a chat to start messaging</p>
             </div>
             {chatHistory &&
-              chatHistory.map((item, index) => (
-                <div key={index}>
-                  <Container>
-                    <div key={index} onMouseOver={() => showChatMenus()}>
-                      <p>
-                        <strong>{item.user_name}: </strong>
-                        {item.message}
-                        <span className="ms-2">Testing</span>
-                      </p>
-                    </div>
+              chatHistory.map((item, index) => {
+                return (
+                  <Container key={index}>
+                    <p>
+                      <strong>{item.user_name}: </strong>
+                      {item.message}
+                    </p>
                   </Container>
-                </div>
-              ))}
+                );
+              })}
             <Container className={style.chatMessagesContainer}>
               <div className={style.chatMessagesInnerContainer}>
                 {messages.map((item, index) => (
