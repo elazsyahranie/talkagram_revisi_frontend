@@ -99,6 +99,36 @@ body {
   width: 260px;
 }
 
+.senderChatHistoryAlign {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 7px;
+}
+
+.receiverChatHistoryAlign {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 7px;
+}
+
+.senderChatBubble {
+  background-color: #ffffff;
+  display: inline-block;
+}
+
+.receiverChatBubble {
+  background-color: #7e98df;
+  display: inline-block;
+}
+
+.senderChatHistory {
+  padding: 13px 15px 13px 15px;
+}
+
+.receiverChatHistory {
+  padding: 13px 15px 13px 15px;
+}
+
 .formChat {
   position: absolute;
   width: 98%;
