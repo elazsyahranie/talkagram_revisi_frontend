@@ -448,6 +448,7 @@ function ChatList(props) {
             </div>
             {chatHistory &&
               chatHistory.map((item, index) => {
+                const nextElement = chatHistory[index + 1];
                 return (
                   <Container
                     key={index}
@@ -465,11 +466,6 @@ function ChatList(props) {
                         item.sender_id !== userId
                           ? style.senderChatBubble
                           : style.receiverChatBubble
-                      }
-                      style={
-                        item.sender_id !== userId
-                          ? { borderRadius: "20px 20px 5px 20px" }
-                          : { borderRadius: "20px 20px 20px 5px" }
                       }
                     >
                       <div
@@ -505,6 +501,13 @@ function ChatList(props) {
                             </span>
                           )}
                           <span>{item.message}</span>
+                          {nextElement && nextElement === item.user_id ? (
+                            <small>Exists</small>
+                          ) : null}
+                          {nextElement && nextElement !== item.user_id ? (
+                            <small>Doesn't exists</small>
+                          ) : null}
+                          {!nextElement && null}
                           {item.sender_id === userId && (
                             <span
                               className={
