@@ -224,6 +224,9 @@ function ChatList(props) {
   const [showChatSettings, setShowChatSettings] = useState("");
   // this.setState({ hover: {...this.state.hover, i: false }})
 
+  // Edit Chat Form Hooks
+  const [showEditChat, setShowEditChat] = useState("");
+
   // CHAT MENU FUNCTION //
   const showEditandDelete = (index) => {
     setShowChatSettings(index);
@@ -231,6 +234,10 @@ function ChatList(props) {
 
   const hideEditandDelete = () => {
     setShowChatSettings("");
+  };
+
+  const editChatFormHandle = () => {
+    setShowEditChat(true);
   };
 
   const editChatHandle = () => {
@@ -441,39 +448,129 @@ function ChatList(props) {
             </div>
             {chatHistory &&
               chatHistory.map((item, index) => {
+                const previousElement = chatHistory[index - 1];
+                const nextElement = chatHistory[index + 1];
+                console.log(previousElement);
                 return (
                   <Container
                     key={index}
                     onMouseEnter={() => showEditandDelete(index)}
                     onMouseLeave={() => hideEditandDelete()}
                     style={{ cursor: "pointer" }}
+                    className={
+                      item.sender_id !== userId
+                        ? style.senderChatHistoryAlign
+                        : style.receiverChatHistoryAlign
+                    }
                   >
-                    <p>
-                      <strong>{item.user_name}: </strong>
-                      {item.message}
-                      <span
+                    <div
+                      className={
+                        item.sender_id !== userId
+                          ? style.senderChatBubble
+                          : style.receiverChatBubble
+                      }
+                      style={
+                        // SENDER (NOT USER) BUBBLE CHAT STYLING
+                        // No previous bubble chat at all
+                        // But there's next bubble chat from the same user
+                        !previousElement &&
+                        nextElement.user_id === item.user_id &&
+                        item.sender_id !== userId
+                          ? { borderRadius: "20px 20px 5px 20px" }
+                          : // There's previous bubble chat, but not from the same user
+                          // But there's bubble chat from the same user
+                          previousElement &&
+                            previousElement.user_id !== item.user_id &&
+                            nextElement &&
+                            nextElement.user_id === item.user_id &&
+                            item.sender_id !== userId
+                          ? { borderRadius: "20px 20px 5px 20px" }
+                          : // There's previous bubble chat from the same user
+                          // But there's next bubble chat from different user
+                          previousElement &&
+                            previousElement.user_id === item.user_id &&
+                            nextElement &&
+                            nextElement.user_id !== item.user_id &&
+                            item.sender_id !== userId
+                          ? { borderRadius: "20px 5px 20px 20px" }
+                          : // There's previous bubble chat from the same user
+                          // Also there's next bubble chat from the same user
+                          previousElement &&
+                            previousElement.user_id === item.user_id &&
+                            nextElement &&
+                            nextElement.user_id === item.user_id &&
+                            item.sender_id !== userId
+                          ? { borderRadius: "20px 20px 20px 20px" }
+                          : // There's previous bubble chat from the same user
+                          // But there's no next bubble chat at all
+                          previousElement &&
+                            previousElement.user_id === item.user_id &&
+                            !nextElement &&
+                            item.sender_id !== userId
+                          ? { borderRadius: "20px 5px 20px 20px" }
+                          : null
+                      }
+                    >
+                      <div
                         className={
-                          showChatSettings === index
-                            ? style.chatMessagesSettingStylingDisplay
-                            : style.chatMessagesSettingStylingHide
+                          item.sender_id !== userId
+                            ? style.senderChatHistory
+                            : style.receiverChatHistory
                         }
                       >
-                        <span className="mx-3">
-                          <FontAwesomeIcon
-                            icon={faPencilAlt}
-                            title="Edit chat"
-                            onClick={() => editChatHandle()}
-                          />
-                        </span>
                         <span>
-                          <FontAwesomeIcon
-                            icon={faTrashAlt}
-                            title="Delete chat"
-                            onClick={() => deleteChatHandle()}
-                          />
+                          {item.sender_id !== userId && (
+                            <span
+                              className={
+                                showChatSettings === index
+                                  ? style.chatMessagesSettingStylingDisplay
+                                  : style.chatMessagesSettingStylingHide
+                              }
+                            >
+                              <span className="mx-3">
+                                <FontAwesomeIcon
+                                  icon={faPencilAlt}
+                                  title="Edit chat"
+                                  onClick={() => editChatHandle()}
+                                />
+                              </span>
+                              <span>
+                                <FontAwesomeIcon
+                                  icon={faTrashAlt}
+                                  title="Delete chat"
+                                  onClick={() => deleteChatHandle()}
+                                />
+                              </span>
+                            </span>
+                          )}
+                          <span>{item.message}</span>
+                          {item.sender_id === userId && (
+                            <span
+                              className={
+                                showChatSettings === index
+                                  ? style.chatMessagesSettingStylingDisplay
+                                  : style.chatMessagesSettingStylingHide
+                              }
+                            >
+                              <span className="mx-3">
+                                <FontAwesomeIcon
+                                  icon={faPencilAlt}
+                                  title="Edit chat"
+                                  onClick={() => editChatHandle()}
+                                />
+                              </span>
+                              <span>
+                                <FontAwesomeIcon
+                                  icon={faTrashAlt}
+                                  title="Delete chat"
+                                  onClick={() => deleteChatHandle()}
+                                />
+                              </span>
+                            </span>
+                          )}
                         </span>
-                      </span>
-                    </p>
+                      </div>
+                    </div>
                   </Container>
                 );
               })}
@@ -481,9 +578,7 @@ function ChatList(props) {
               <div className={style.chatMessagesInnerContainer}>
                 {messages.map((item, index) => (
                   <div key={index} className={style.chatMessagesSettingStyling}>
-                    <p>
-                      <strong>{item.user_name}: </strong> {item.message}
-                    </p>
+                    <p>{item.message}</p>
                   </div>
                 ))}
               </div>
