@@ -85,7 +85,21 @@ body {
   padding-top: 10px !important;
 }
 
+.chatMessageHistoryProfilePicture {
+  height: 40px;
+  width: auto;
+  border-radius: 10px;
+}
+
+@media (max-width: 767.98px) {
+  .chatMessageHistoryProfilePicture {
+    display: none;
+  }
+}
+
 .chatMessagesSettingDisplay {
+  position: relative;
+  bottom: 0px;
   display: inline;
   /* background-color: transparent; */
 }
@@ -102,25 +116,27 @@ body {
 .senderChatHistoryAlign {
   display: flex;
   justify-content: flex-end;
+  align-items: flex-end;
   margin-bottom: 7px;
 }
 
 .receiverChatHistoryAlign {
   display: flex;
   justify-content: flex-start;
+  align-items: flex-end;
   margin-bottom: 7px;
 }
 
 .senderChatBubble {
   background-color: #ffffff;
   display: inline-block;
-  border-radius: 20px 20px 5px 20px;
+  border-radius: 20px 20px 20px 20px;
 }
 
 .receiverChatBubble {
   background-color: #7e98df;
   display: inline-block;
-  border-radius: 20px 20px 20px 5px;
+  border-radius: 20px 20px 20px 20px;
 }
 
 .senderChatHistory {
