@@ -10,6 +10,7 @@ import {
 } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
+import styleScsss from "./chat-list.module.scss";
 import {
   getRooms,
   insertChat,
@@ -22,6 +23,7 @@ import { getUserbyId } from "../../redux/action/auth";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faArrowAltCircleRight,
   faBars,
   faCog,
   faUserFriends,
@@ -305,6 +307,12 @@ function ChatList(props) {
 
   return (
     <>
+      <FontAwesomeIcon
+        icon={faArrowAltCircleRight}
+        title="Edit chat"
+        className={style.displayRoomChatListIcon}
+        style={{ height: "30px", width: "30px" }}
+      />
       <Modal
         {...props}
         size="lg"
@@ -350,7 +358,7 @@ function ChatList(props) {
       </Modal>
       <Container fluid className={style.wholeContainer}>
         <Row className={style.wholeRow}>
-          <Col lg={3} md={3} sm={12} xs={12}>
+          <Col lg={3} md={3} className="d-none d-md-block">
             <div className="my-4 d-flex justify-content-between">
               <h3 className={style.boldLogo}>Talkagram</h3>
               <FontAwesomeIcon
@@ -403,13 +411,7 @@ function ChatList(props) {
               </div>
             )}
           </Col>
-          <Col
-            lg={9}
-            md={9}
-            sm={12}
-            xs={12}
-            className={style.chatRoomStyling}
-          >
+          <Col lg={9} md={9} sm={12} xs={12} className={style.chatRoomStyling}>
             {messageInput && (
               <div>
                 <Container className="py-4">

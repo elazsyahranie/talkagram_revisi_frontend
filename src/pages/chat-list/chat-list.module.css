@@ -97,6 +97,22 @@ body {
   }
 }
 
+/* SHOW ROOM CHAT LIST ICON */
+.displayRoomChatListIcon {
+  display: block;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+}
+
+@media (min-width: 767.98px) {
+  .displayRoomChatListIcon {
+    display: none;
+  }
+}
+/* SHOW ROOM CHAT LIST ICON */
+
 .chatMessagesSettingDisplay {
   position: relative;
   bottom: 0px;
