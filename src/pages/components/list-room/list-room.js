@@ -15,24 +15,25 @@ function ListRoom(rooms) {
       {rooms.data.length > 0 ? (
         rooms.data.map((item, index) => (
           <div
-            className="mb-3 d-flex"
+            className={`mb-3 d-flex ${style.overflowTextOuter}`}
             key={index}
             onClick={() =>
               rooms.selectRoom(item.room_chat, item.user_id, item.user_name)
             }
-            style={{ cursor: "pointer" }}
+            style={{
+              cursor: "pointer",
+            }}
           >
             <div>
               <Image
                 src={noProfilePicture}
                 alt=""
                 className={style.profilePictureStyling}
-                fluid
               />
             </div>
-            <div className={`${style.roomUserStyling} my-auto`}>
-              <h5 className="mb-2">{item.user_name}</h5>
-              <h6 className="mt-2">{item.user_email}</h6>
+            <div className={`my-auto ${style.overflowTextParent}`}>
+              <h5 className={`mb-2`}>{item.user_name}</h5>
+              <h6 className={`mt-2`}>{item.user_email}</h6>
             </div>
           </div>
         ))

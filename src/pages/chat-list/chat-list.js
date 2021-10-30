@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
-import styleScsss from "./chat-list.module.scss";
+// import styleScsss from "./chat-list.module.scss";
 import {
   getRooms,
   insertChat,
@@ -305,6 +305,15 @@ function ChatList(props) {
     props.history.push("/login");
   };
 
+  // Small Screen/Mobile Menu Left Menu
+  const [fullscreen, setFullscreen] = useState(true);
+  const [showFullModal, setShowFullModal] = useState(false);
+
+  const displayMobileMenu = (breakpoint) => {
+    setFullscreen(breakpoint);
+    setShowFullModal(true);
+  };
+
   return (
     <>
       <FontAwesomeIcon
@@ -312,7 +321,20 @@ function ChatList(props) {
         title="Edit chat"
         className={style.displayRoomChatListIcon}
         style={{ height: "30px", width: "30px" }}
+        onClick={() => displayMobileMenu("sm-down")}
       />
+      {/* LIST ROOM ON MOBILE */}
+      <Modal
+        show={showFullModal}
+        fullscreen="xxl-down"
+        onHide={() => setShowFullModal(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Modal</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Modal body content</Modal.Body>
+      </Modal>
+      {/* LIST ROOM ON MOBILE */}
       <Modal
         {...props}
         size="lg"
@@ -358,7 +380,7 @@ function ChatList(props) {
       </Modal>
       <Container fluid className={style.wholeContainer}>
         <Row className={style.wholeRow}>
-          <Col lg={3} md={3} className="d-none d-md-block">
+          <Col lg={3} md={3} className={`d-none d-md-block`}>
             <div className="my-4 d-flex justify-content-between">
               <h3 className={style.boldLogo}>Talkagram</h3>
               <FontAwesomeIcon
@@ -372,7 +394,7 @@ function ChatList(props) {
     setDisplaySettings(false);
     setDisplayContacts(true); */}
             {displayListRoom && (
-              <div className="my-3">
+              <div className={`my-3`}>
                 <ListRoom
                   data={rooms}
                   onlineList={userOnline}
