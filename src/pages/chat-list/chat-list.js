@@ -1,5 +1,6 @@
 import {
   Container,
+  Collapse,
   Row,
   Col,
   Form,
@@ -8,6 +9,7 @@ import {
   Modal,
   Toast,
 } from "react-bootstrap";
+import { CSSTransition } from "react-transition-group";
 import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
 // import styleScsss from "./chat-list.module.scss";
@@ -321,19 +323,36 @@ function ChatList(props) {
         title="Edit chat"
         className={style.displayRoomChatListIcon}
         style={{ height: "30px", width: "30px" }}
-        onClick={() => displayMobileMenu("sm-down")}
+        onClick={() => displayMobileMenu(true)}
       />
       {/* LIST ROOM ON MOBILE */}
-      <Modal
-        show={showFullModal}
-        fullscreen="xxl-down"
-        onHide={() => setShowFullModal(false)}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Modal</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Modal body content</Modal.Body>
-      </Modal>
+      <CSSTransition>
+        <Modal
+          show={showFullModal}
+          fullscreen={fullscreen}
+          onHide={() => setShowFullModal(false)}
+        >
+          <Modal.Body>
+            <div className="my-2 d-flex justify-content-between">
+              <h3 className={style.boldLogo}>Talkagram</h3>
+              <FontAwesomeIcon
+                icon={faBars}
+                className={style.showMenuIcon}
+                onClick={() => handleShow()}
+              />
+            </div>
+            {displayListRoom && (
+              <div className={`my-1`}>
+                <ListRoom
+                  data={rooms}
+                  onlineList={userOnline}
+                  selectRoom={selectRoom}
+                />
+              </div>
+            )}
+          </Modal.Body>
+        </Modal>
+      </CSSTransition>
       {/* LIST ROOM ON MOBILE */}
       <Modal
         {...props}
