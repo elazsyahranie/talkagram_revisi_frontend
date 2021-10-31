@@ -9,7 +9,7 @@ import {
   Modal,
   Toast,
 } from "react-bootstrap";
-import { CSSTransition } from "react-transition-group";
+import "animate.css";
 import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
 // import styleScsss from "./chat-list.module.scss";
@@ -316,6 +316,10 @@ function ChatList(props) {
     setShowFullModal(true);
   };
 
+  const hideMobileMenu = () => {
+    setShowFullModal(false);
+  };
+
   return (
     <>
       <FontAwesomeIcon
@@ -326,33 +330,33 @@ function ChatList(props) {
         onClick={() => displayMobileMenu(true)}
       />
       {/* LIST ROOM ON MOBILE */}
-      <CSSTransition>
-        <Modal
-          show={showFullModal}
-          fullscreen={fullscreen}
-          onHide={() => setShowFullModal(false)}
-        >
-          <Modal.Body>
-            <div className="my-2 d-flex justify-content-between">
-              <h3 className={style.boldLogo}>Talkagram</h3>
-              <FontAwesomeIcon
-                icon={faBars}
-                className={style.showMenuIcon}
-                onClick={() => handleShow()}
+      <Modal
+        show={showFullModal}
+        className="animate__animated animate__slideInLeft"
+        fullscreen={fullscreen}
+        animation={false}
+        // onHide={() => hideMobileMenu()}
+      >
+        <Modal.Body>
+          <div className="my-2 d-flex justify-content-between">
+            <h3 className={style.boldLogo}>Talkagram</h3>
+            <FontAwesomeIcon
+              icon={faBars}
+              className={style.showMenuIcon}
+              onClick={() => hideMobileMenu()}
+            />
+          </div>
+          {displayListRoom && (
+            <div className={`my-1`}>
+              <ListRoom
+                data={rooms}
+                onlineList={userOnline}
+                selectRoom={selectRoom}
               />
             </div>
-            {displayListRoom && (
-              <div className={`my-1`}>
-                <ListRoom
-                  data={rooms}
-                  onlineList={userOnline}
-                  selectRoom={selectRoom}
-                />
-              </div>
-            )}
-          </Modal.Body>
-        </Modal>
-      </CSSTransition>
+          )}
+        </Modal.Body>
+      </Modal>
       {/* LIST ROOM ON MOBILE */}
       <Modal
         {...props}
