@@ -181,6 +181,7 @@ function ChatList(props) {
     props
       .chatHistory(room_chat)
       .then((res) => {
+        console.log(res.value.data.data);
         setChatHistory(res.value.data.data);
       })
       .catch((err) => {

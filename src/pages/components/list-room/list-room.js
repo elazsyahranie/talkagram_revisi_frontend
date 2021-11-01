@@ -31,9 +31,9 @@ function ListRoom(rooms) {
                 className={style.profilePictureStyling}
               />
             </div>
-            <div className={`my-auto ${style.overflowTextParent}`}>
+            <div className={`ms-2 my-auto ${style.overflowTextParent}`}>
               <h5 className={`mb-2`}>{item.user_name}</h5>
-              <h6 className={`mt-2`}>{item.user_email}</h6>
+              <h6 className={`mt-2`}>{item.last_chat}</h6>
             </div>
           </div>
         ))
