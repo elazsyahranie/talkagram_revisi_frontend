@@ -162,7 +162,7 @@ body {
 }
 
 .senderChatBubble {
-  background-color: #ffffff;
+  background-color: red;
   display: inline-block;
   border-radius: 20px 20px 20px 20px;
 }
