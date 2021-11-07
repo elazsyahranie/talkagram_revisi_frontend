@@ -721,7 +721,7 @@ function ChatList(props) {
                     <div
                       key={index}
                       className={
-                        item.senderId === userId
+                        item.senderId !== userId
                           ? style.senderChatHistoryAlign
                           : style.receiverChatHistoryAlign
                       }
@@ -744,7 +744,7 @@ function ChatList(props) {
                             !messages[index - 1] &&
                               !messages[index + 1] &&
                               item.senderId !== userId
-                            ? { borderRadius: "20px 20px 20px 5px" }
+                            ? { borderRadius: "20px 5px 20px 20px" }
                             : // USER BUBBLE CHAT STYLING
                             // No previous bubble chat at all
                             // But there's next bubble chat from the same user
@@ -780,7 +780,15 @@ function ChatList(props) {
                             // But there's no next bubble chat at all
                             messages[index - 1] &&
                               messages[index - 1].senderId === item.senderId &&
-                              !chatHistory[index + 1] &&
+                              !messages[index + 1] &&
+                              item.senderId === userId
+                            ? { borderRadius: "5px 20px 20px 20px" }
+                            : // There's no previous bubble chat from the same user
+                            // There's no next bubble chat from the same user
+                            messages[index - 1] &&
+                              messages[index - 1].senderId !== item.senderId &&
+                              messages[index + 1] &&
+                              messages[index + 1].senderId !== item.senderId &&
                               item.senderId === userId
                             ? { borderRadius: "5px 20px 20px 20px" }
                             : // SENDER (NOT USER) BUBBLE CHAT STYLING
@@ -821,6 +829,14 @@ function ChatList(props) {
                               !messages[index + 1] &&
                               item.senderId !== userId
                             ? { borderRadius: "20px 5px 20px 20px" }
+                            : // There's no previous bubble chat from the same user
+                            // There's no next bubble chat from the same user
+                            messages[index - 1] &&
+                              messages[index - 1].senderId !== item.senderId &&
+                              messages[index + 1] &&
+                              messages[index + 1].senderId !== item.senderId &&
+                              item.senderId !== userId
+                            ? { borderRadius: "20px 20px 5px 20px" }
                             : null
                         }
                       >
