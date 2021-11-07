@@ -62,6 +62,12 @@ function ChatList(props) {
   const [listOfPendingRequests, setListOfPendingRequests] = useState([]);
   const [listOfContacts, setListOfContacts] = useState([]);
 
+  const [previousElement, setPreviousElement] = useState("");
+  const [nextElement, setNextElement] = useState("");
+
+  const [previousMessage, setPreviousMessage] = useState("");
+  const [nextMessage, setNextMessage] = useState("");
+
   // Modal
   const [showMenuModal, setShowMenuModal] = useState(false);
   // const [showContactsModal, setShowContactsModal] = useState(false);
@@ -85,6 +91,8 @@ function ChatList(props) {
     if (props.socket) {
       props.socket.on("chatMessage", (dataMessage) => {
         setMessages([...messages, dataMessage]);
+        setPreviousMessage([...messages, dataMessage]);
+        setNextMessage([...messages, dataMessage]);
       });
       connect();
     }
@@ -181,8 +189,10 @@ function ChatList(props) {
     props
       .chatHistory(room_chat)
       .then((res) => {
-        console.log(res.value.data.data);
+        // console.log(res.value.data.data);
         setChatHistory(res.value.data.data);
+        setPreviousElement(res.value.data.data);
+        setNextElement(res.value.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -274,7 +284,9 @@ function ChatList(props) {
       event.preventDefault();
       const setData = {
         room: room.new,
+        senderId: user_id,
         user_name,
+        receiverId: receiver,
         message,
       };
       const data = {
@@ -502,11 +514,8 @@ function ChatList(props) {
             >
               <p>Please select a chat to start messaging</p>
             </div>
-            {chatHistory &&
+            {chatHistory.length > 0 &&
               chatHistory.map((item, index) => {
-                const previousElement = chatHistory[index - 1];
-                const nextElement = chatHistory[index + 1];
-                // console.log(item.user_image);
                 return (
                   <Container
                     key={index}
@@ -519,10 +528,6 @@ function ChatList(props) {
                         : style.receiverChatHistoryAlign
                     }
                   >
-                    {/* {(item.sender_id === userId && !nextElement) ||
-                    (item.sender_id === userId &&
-                      nextElement &&
-                      nextElement.user_id !== item.user_id) ? () : null} */}
                     <Image
                       src={noProfilePicture}
                       alt=""
@@ -597,7 +602,7 @@ function ChatList(props) {
                             nextElement &&
                             nextElement.user_id === item.user_id &&
                             item.sender_id === userId
-                          ? { borderRadius: "20px 20px 20px 20px" }
+                          ? { borderRadius: "0px 0px 0px 0px" }
                           : // There's previous bubble chat from the same user
                           // But there's no next bubble chat at all
                           previousElement &&
@@ -643,6 +648,8 @@ function ChatList(props) {
                             !nextElement &&
                             item.sender_id !== userId
                           ? { borderRadius: "20px 5px 20px 20px" }
+                          : !previousElement && !nextElement
+                          ? { borderRadius: "20px 20px 20px 20px" }
                           : null
                       }
                     >
@@ -702,11 +709,120 @@ function ChatList(props) {
               })}
             <Container className={style.chatMessagesContainer}>
               <div className={style.chatMessagesInnerContainer}>
-                {messages.map((item, index) => (
-                  <div key={index} className={style.chatMessagesSettingStyling}>
-                    <p>{item.message}</p>
-                  </div>
-                ))}
+                {messages.map((item, index) => {
+                  console.log(item);
+                  return (
+                    <div
+                      key={index}
+                      className={
+                        item.sender_id !== userId
+                          ? style.receiverChatHistoryAlign
+                          : style.senderChatHistoryAlign
+                      }
+                    >
+                      <div
+                        className={
+                          item.sender_id !== userId
+                            ? style.receiverChatBubble
+                            : style.senderChatBubble
+                        }
+                        style={
+                          // USER BUBBLE CHAT STYLING
+                          // No previous bubble chat at all
+                          // But there's next bubble chat from the same user
+                          !previousMessage &&
+                          nextMessage.user_id === item.user_id &&
+                          item.sender_id === userId
+                            ? { borderRadius: "20px 20px 20px 5px" }
+                            : // There's previous bubble chat, but not from the same user
+                            // But there's next bubble chat from the same user
+                            previousMessage &&
+                              previousMessage.user_id !== item.user_id &&
+                              nextMessage &&
+                              nextMessage.user_id === item.user_id &&
+                              item.sender_id === userId
+                            ? { borderRadius: "20px 20px 20px 5px" }
+                            : // There's previous bubble chat from the same user
+                            // But there's next bubble chat from different user
+                            previousMessage &&
+                              previousMessage.user_id === item.user_id &&
+                              nextMessage &&
+                              nextMessage.user_id !== item.user_id &&
+                              item.sender_id === userId
+                            ? { borderRadius: "5px 20px 20px 20px" }
+                            : // There's previous bubble chat from the same user
+                            // Also there's next bubble chat from the same user
+                            previousMessage &&
+                              previousMessage.user_id === item.user_id &&
+                              nextMessage &&
+                              nextMessage.user_id === item.user_id &&
+                              item.sender_id === userId
+                            ? { borderRadius: "20px 20px 20px 20px" }
+                            : // There's previous bubble chat from the same user
+                            // But there's no next bubble chat at all
+                            previousMessage &&
+                              previousMessage.user_id === item.user_id &&
+                              !nextElement &&
+                              item.sender_id === userId
+                            ? { borderRadius: "5px 20px 20px 20px" }
+                            : // SENDER (NOT USER) BUBBLE CHAT STYLING
+                            // No previous bubble chat at all
+                            // But there's next bubble chat from the same user
+                            !previousMessage &&
+                              nextMessage.user_id === item.user_id &&
+                              item.sender_id !== userId
+                            ? { borderRadius: "20px 20px 5px 20px" }
+                            : // There's previous bubble chat, but not from the same user
+                            // But there's bubble chat from the same user
+                            previousMessage &&
+                              previousMessage.user_id !== item.user_id &&
+                              nextMessage &&
+                              nextMessage.user_id === item.user_id &&
+                              item.sender_id !== userId
+                            ? { borderRadius: "20px 20px 5px 20px" }
+                            : // There's previous bubble chat from the same user
+                            // But there's next bubble chat from different user
+                            previousMessage &&
+                              previousMessage.user_id === item.user_id &&
+                              nextMessage &&
+                              nextMessage.user_id !== item.user_id &&
+                              item.sender_id !== userId
+                            ? { borderRadius: "20px 5px 20px 20px" }
+                            : // There's previous bubble chat from the same user
+                            // Also there's next bubble chat from the same user
+                            previousMessage &&
+                              previousMessage.user_id === item.user_id &&
+                              nextMessage &&
+                              nextMessage.user_id === item.user_id &&
+                              item.sender_id !== userId
+                            ? { borderRadius: "20px 20px 20px 20px" }
+                            : // There's previous bubble chat from the same user
+                            // But there's no next bubble chat at all
+                            previousMessage &&
+                              previousMessage.user_id === item.user_id &&
+                              !nextMessage &&
+                              item.sender_id !== userId
+                            ? { borderRadius: "20px 5px 20px 20px" }
+                            : !previousMessage && !nextMessage
+                            ? { borderRadius: "20px 20px 20px 20px" }
+                            : null
+                        }
+                      >
+                        <div
+                          className={
+                            item.sender_id !== userId
+                              ? style.senderChatHistory
+                              : style.receiverChatHistory
+                          }
+                        >
+                          <span>
+                            <span>{item.message}</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </Container>
           </Col>
