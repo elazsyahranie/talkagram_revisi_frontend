@@ -3,7 +3,6 @@ import style from "./list-room.module.css";
 import noProfilePicture from "../../components/img-not-found.png";
 
 function ListRoom(rooms) {
-  // console.log(rooms.data);
   return (
     <>
       <Form className="mb-3">

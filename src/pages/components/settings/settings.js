@@ -175,7 +175,7 @@ function Settings(props) {
       });
   };
 
-  console.log(props.auth.data.user_image);
+  // console.log(props.auth.data.user_image);
 
   return (
     <>

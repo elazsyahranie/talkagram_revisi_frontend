@@ -316,34 +316,36 @@ function ChatList(props) {
   };
 
   // Small Screen/Mobile Menu Left Menu
-  const [fullscreen, setFullscreen] = useState(false);
+  const [displayMobileMenu, setDisplayMobileMenu] = useState(false);
   const [displayMobileMenuIcon, setDisplayMobileMenuIcon] = useState(true);
   // const [showFullModal, setShowFullModal] = useState(false);
 
-  const displayMobileMenu = (breakpoint) => {
-    setFullscreen(breakpoint);
+  const showMobileMenu = (breakpoint) => {
+    setDisplayMobileMenu(breakpoint);
     // setShowFullModal(true);
   };
 
   const hideMobileMenu = () => {
-    setFullscreen(false);
+    setDisplayMobileMenu(false);
   };
 
   return (
     <>
       {/* LIST ROOM ON MOBILE */}
-      <MobileMenu
-        show={fullscreen}
-        close={() => hideMobileMenu()}
-        className={style.mobileMenu}
-      />
+      {displayMobileMenu && (
+        <MobileMenu
+          close={hideMobileMenu}
+          className={style.mobileMenu}
+          style={{ zIndex: "1" }}
+        />
+      )}
       {/* LIST ROOM ON MOBILE */}
       <FontAwesomeIcon
         icon={faArrowAltCircleRight}
         title="Edit chat"
         className={style.displayRoomChatListIcon}
-        style={{ height: "30px", width: "30px" }}
-        onClick={() => displayMobileMenu(true)}
+        style={{ zIndex: "2", height: "30px", width: "30px" }}
+        onClick={() => showMobileMenu(true)}
       />
       <Modal
         {...props}
