@@ -1,0 +1,10 @@
+.background {
+  position: relative;
+  background-color: white;
+  height: 100vh;
+}
+
+.boldLogo {
+  font-weight: bolder;
+  color: #7e98df;
+}

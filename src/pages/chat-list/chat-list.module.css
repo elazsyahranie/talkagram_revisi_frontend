@@ -7,6 +7,10 @@ body {
   color: #7e98df;
 }
 
+.mobileMenu {
+  position: absolute;
+}
+
 /* .modalTransitionEnter {
   transform: translateX(-100%);
 }
@@ -121,7 +125,6 @@ body {
   position: absolute;
   top: 20px;
   left: 20px;
-  z-index: 1;
 }
 
 @media (min-width: 767.98px) {

@@ -39,6 +39,7 @@ import {
 import noProfilePicture from "../components/img-not-found.png";
 
 // COMPONENTS
+import MobileMenu from "../components/MobileMenu/MobileMenu";
 import ListRoom from "../components/list-room/list-room";
 import Settings from "../components/settings/settings";
 import Contacts from "../components/contacts/contacts";
@@ -315,20 +316,28 @@ function ChatList(props) {
   };
 
   // Small Screen/Mobile Menu Left Menu
-  const [fullscreen, setFullscreen] = useState(true);
-  const [showFullModal, setShowFullModal] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
+  const [displayMobileMenuIcon, setDisplayMobileMenuIcon] = useState(true);
+  // const [showFullModal, setShowFullModal] = useState(false);
 
   const displayMobileMenu = (breakpoint) => {
     setFullscreen(breakpoint);
-    setShowFullModal(true);
+    // setShowFullModal(true);
   };
 
   const hideMobileMenu = () => {
-    setShowFullModal(false);
+    setFullscreen(false);
   };
 
   return (
     <>
+      {/* LIST ROOM ON MOBILE */}
+      <MobileMenu
+        show={fullscreen}
+        close={() => hideMobileMenu()}
+        className={style.mobileMenu}
+      />
+      {/* LIST ROOM ON MOBILE */}
       <FontAwesomeIcon
         icon={faArrowAltCircleRight}
         title="Edit chat"
@@ -336,35 +345,6 @@ function ChatList(props) {
         style={{ height: "30px", width: "30px" }}
         onClick={() => displayMobileMenu(true)}
       />
-      {/* LIST ROOM ON MOBILE */}
-      <Modal
-        show={showFullModal}
-        className="animate__animated animate__slideInLeft"
-        fullscreen={fullscreen}
-        animation={false}
-        // onHide={() => hideMobileMenu()}
-      >
-        <Modal.Body>
-          <div className="my-2 d-flex justify-content-between">
-            <h3 className={style.boldLogo}>Talkagram</h3>
-            <FontAwesomeIcon
-              icon={faBars}
-              className={style.showMenuIcon}
-              onClick={() => hideMobileMenu()}
-            />
-          </div>
-          {displayListRoom && (
-            <div className={`my-1`}>
-              <ListRoom
-                data={rooms}
-                onlineList={userOnline}
-                selectRoom={selectRoom}
-              />
-            </div>
-          )}
-        </Modal.Body>
-      </Modal>
-      {/* LIST ROOM ON MOBILE */}
       <Modal
         {...props}
         size="lg"
