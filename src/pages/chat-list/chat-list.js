@@ -317,7 +317,8 @@ function ChatList(props) {
 
   // Small Screen/Mobile Menu Left Menu
   const [displayMobileMenu, setDisplayMobileMenu] = useState(false);
-  const [displayMobileMenuIcon, setDisplayMobileMenuIcon] = useState(true);
+  const [undisplayMobileMenu, setUndisplayMobileMenu] = useState(false);
+  // const [displayMobileMenuIcon, setDisplayMobileMenuIcon] = useState(true);
   // const [showFullModal, setShowFullModal] = useState(false);
 
   const showMobileMenu = (breakpoint) => {
@@ -332,13 +333,12 @@ function ChatList(props) {
   return (
     <>
       {/* LIST ROOM ON MOBILE */}
-      {displayMobileMenu && (
-        <MobileMenu
-          close={hideMobileMenu}
-          className={style.mobileMenu}
-          style={{ zIndex: "1" }}
-        />
-      )}
+      <MobileMenu
+        show={displayMobileMenu}
+        close={hideMobileMenu}
+        className={style.mobileMenu}
+        style={{ zIndex: "2" }}
+      />
       {/* LIST ROOM ON MOBILE */}
       <FontAwesomeIcon
         icon={faArrowAltCircleRight}
