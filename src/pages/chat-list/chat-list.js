@@ -482,7 +482,6 @@ function ChatList(props) {
             </div>
             {chatHistory &&
               chatHistory.map((item, index) => {
-                console.log(item);
                 return (
                   <Container
                     key={index}
