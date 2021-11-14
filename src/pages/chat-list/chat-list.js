@@ -12,7 +12,6 @@ import {
 import "animate.css";
 import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
-// import styleScsss from "./chat-list.module.scss";
 import {
   getRooms,
   insertChat,
@@ -63,12 +62,8 @@ function ChatList(props) {
   const [listOfPendingRequests, setListOfPendingRequests] = useState([]);
   const [listOfContacts, setListOfContacts] = useState([]);
 
-  // const [messages[index - 1], setmessages[index - 1]] = useState("");
-  // const [messages[index + 1], setmessages[index + 1]] = useState("");
-
   // Modal
   const [showMenuModal, setShowMenuModal] = useState(false);
-  // const [showContactsModal, setShowContactsModal] = useState(false);
 
   const handleClose = () => setShowMenuModal(false);
   const handleShow = () => setShowMenuModal(true);
@@ -81,7 +76,7 @@ function ChatList(props) {
 
   // Mobile Size Hooks
 
-  const { user_name, user_id } = props.auth.data;
+  const { user_name, user_id, user_image } = props.auth.data;
 
   const userId = props.auth.data.user_id;
 
@@ -281,6 +276,7 @@ function ChatList(props) {
         room: room.new,
         senderId: user_id,
         user_name,
+        user_image,
         receiverId: receiver,
         message,
       };
@@ -292,14 +288,14 @@ function ChatList(props) {
         chatMessage: message,
         show: true,
       };
-      props
-        .insertChat(data)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      // props
+      //   .insertChat(data)
+      //   .then((res) => {
+      //     console.log(res);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
       // props.socket.emit("globalMessage", setData);
       // props.socket.emit("privateMessage", setData);
       // props.socket.emit("broadcastMessage", setData);
@@ -318,8 +314,6 @@ function ChatList(props) {
   // Small Screen/Mobile Menu Left Menu
   const [displayMobileMenu, setDisplayMobileMenu] = useState(false);
   const [undisplayMobileMenu, setUndisplayMobileMenu] = useState(false);
-  // const [displayMobileMenuIcon, setDisplayMobileMenuIcon] = useState(true);
-  // const [showFullModal, setShowFullModal] = useState(false);
 
   const showMobileMenu = (breakpoint) => {
     setDisplayMobileMenu(breakpoint);
@@ -401,10 +395,6 @@ function ChatList(props) {
                 onClick={() => handleShow()}
               />
             </div>
-            {/* setShowMenuModal(false);
-    setDisplayListRoom(false);
-    setDisplaySettings(false);
-    setDisplayContacts(true); */}
             {displayListRoom && (
               <div className={`my-3`}>
                 <ListRoom
@@ -492,6 +482,7 @@ function ChatList(props) {
             </div>
             {chatHistory &&
               chatHistory.map((item, index) => {
+                console.log(item);
                 return (
                   <Container
                     key={index}
@@ -505,7 +496,11 @@ function ChatList(props) {
                     }
                   >
                     <Image
-                      src={noProfilePicture}
+                      src={
+                        item.user_image
+                          ? `${process.env.REACT_APP_IMAGE_URL}${item.user_image}`
+                          : noProfilePicture
+                      }
                       alt=""
                       className={`${style.chatMessageHistoryProfilePicture} me-3`}
                       style={
@@ -678,7 +673,11 @@ function ChatList(props) {
                     )}
                     {item.sender_id !== userId && (
                       <Image
-                        src={noProfilePicture}
+                        src={
+                          item.user_image
+                            ? `${process.env.REACT_APP_IMAGE_URL}${item.user_image}`
+                            : noProfilePicture
+                        }
                         alt=""
                         className={`${style.chatMessageHistoryProfilePicture} ms-3`}
                         style={
@@ -695,11 +694,12 @@ function ChatList(props) {
                   </Container>
                 );
               })}
-            <Container className={style.chatMessagesContainer}>
-              <div className={style.chatMessagesInnerContainer}>
-                {messages.map((item, index) => {
-                  // console.log(item);
-                  return (
+
+            {messages.map((item, index) => {
+              console.log(item);
+              return (
+                <Container className={style.chatMessagesContainer}>
+                  <div className={style.chatMessagesInnerContainer}>
                     <div
                       key={index}
                       className={
@@ -708,6 +708,23 @@ function ChatList(props) {
                           : style.receiverChatHistoryAlign
                       }
                     >
+                      <Image
+                        src={
+                          item.user_image
+                            ? `${process.env.REACT_APP_IMAGE_URL}${item.user_image}`
+                            : noProfilePicture
+                        }
+                        alt=""
+                        className={`${style.chatMessageHistoryProfilePicture} me-3`}
+                        style={
+                          (item.senderId === userId && !messages[index + 1]) ||
+                          (item.senderId === userId &&
+                            messages[index + 1] &&
+                            messages[index + 1].userId !== item.userId)
+                            ? { visibility: "visible" }
+                            : { visibility: "hidden" }
+                        }
+                      />
                       <div
                         className={
                           item.senderId !== userId
@@ -757,7 +774,7 @@ function ChatList(props) {
                               messages[index + 1] &&
                               messages[index + 1].senderId === item.senderId &&
                               item.senderId === userId
-                            ? { borderRadius: "20px 20px 20px 20px" }
+                            ? { borderRadius: "5px 20px 20px 5px" }
                             : // There's previous bubble chat from the same user
                             // But there's no next bubble chat at all
                             messages[index - 1] &&
@@ -803,7 +820,7 @@ function ChatList(props) {
                               messages[index + 1] &&
                               messages[index + 1].senderId === item.senderId &&
                               item.senderId !== userId
-                            ? { borderRadius: "5px 20px 20px 5px" }
+                            ? { borderRadius: "20px 5px 5px 20px" }
                             : // There's previous bubble chat from the same user
                             // But there's no next bubble chat at all
                             messages[index - 1] &&
@@ -834,11 +851,31 @@ function ChatList(props) {
                           </span>
                         </div>
                       </div>
+                      {item.senderId !== userId && (
+                        <Image
+                          src={
+                            item.user_image
+                              ? `${process.env.REACT_APP_IMAGE_URL}${item.user_image}`
+                              : noProfilePicture
+                          }
+                          alt=""
+                          className={`${style.chatMessageHistoryProfilePicture} ms-3`}
+                          style={
+                            (item.senderId !== userId &&
+                              !messages[index + 1]) ||
+                            (item.senderId !== userId &&
+                              messages[index + 1] &&
+                              messages[index + 1].userId !== item.userId)
+                              ? { visibility: "visible" }
+                              : { visibility: "hidden" }
+                          }
+                        />
+                      )}
                     </div>
-                  );
-                })}
-              </div>
-            </Container>
+                  </div>
+                </Container>
+              );
+            })}
           </Col>
         </Row>
         <Toast
