@@ -253,21 +253,22 @@ function Settings(props) {
           <Form>
             <div className="position-relative">
               <Form.Group>
-                {!props.auth.data.user_image ? (
-                  <Image
+                {/* <Image
                     src={noProfilePicture}
                     alt=""
                     className={style.profilePictureStyling}
                     fluid
-                  />
-                ) : (
-                  <Image
-                    src={`${process.env.REACT_APP_IMAGE_URL}${props.auth.data.user_image}`}
-                    alt=""
-                    className={style.profilePictureStyling}
-                    fluid
-                  />
-                )}
+                  /> */}
+                <Image
+                  src={
+                    !props.auth.data.user_image
+                      ? noProfilePicture
+                      : `${process.env.REACT_APP_IMAGE_URL}${props.auth.data.user_image}`
+                  }
+                  alt=""
+                  className={style.profilePictureStyling}
+                  fluid
+                />
                 <Form.Label htmlFor="formFile" className={style.boxUpdateImage}>
                   Jangan di hapus!
                 </Form.Label>
