@@ -1,6 +1,5 @@
 import {
   Container,
-  Collapse,
   Row,
   Col,
   Form,
@@ -33,6 +32,7 @@ import {
   faTrashAlt,
   faQuestionCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
 
 // IMAGES
 import noProfilePicture from "../components/img-not-found.png";
