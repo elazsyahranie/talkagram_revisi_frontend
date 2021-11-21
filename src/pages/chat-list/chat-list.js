@@ -330,20 +330,7 @@ function ChatList(props) {
   return (
     <>
       {/* LIST ROOM ON MOBILE */}
-      <MobileMenu
-        show={displayMobileMenu}
-        close={hideMobileMenu}
-        className={style.mobileMenu}
-        style={{ zIndex: "2" }}
-      />
       {/* LIST ROOM ON MOBILE */}
-      <FontAwesomeIcon
-        icon={faArrowAltCircleRight}
-        title="Edit chat"
-        className={style.displayRoomChatListIcon}
-        style={{ zIndex: "2", height: "30px", width: "30px" }}
-        onClick={() => showMobileMenu(true)}
-      />
       <Modal
         {...props}
         size="lg"
@@ -387,58 +374,74 @@ function ChatList(props) {
           </div>
         </Modal.Body>
       </Modal>
-      <Container fluid className={style.wholeContainer}>
-        <Row className={style.wholeRow}>
-          <Col lg={3} md={3} className={`d-none d-md-block`}>
-            <div className="my-4 d-flex justify-content-between">
-              <h3 className={style.boldLogo}>Talkagram</h3>
-              <FontAwesomeIcon
-                icon={faBars}
-                className={style.showMenuIcon}
-                onClick={() => handleShow()}
-              />
-            </div>
-            {displayListRoom && (
-              <div className={`my-3`}>
-                <ListRoom
-                  data={rooms}
-                  onlineList={userOnline}
-                  selectRoom={selectRoom}
+      <div style={{ position: "relative" }}>
+        <MobileMenu
+          show={displayMobileMenu}
+          close={hideMobileMenu}
+          className={style.mobileMenu}
+          style={{
+            zIndex: "2",
+            position: "absolute",
+          }}
+        />
+        <FontAwesomeIcon
+          icon={faArrowAltCircleRight}
+          title="Edit chat"
+          className={style.displayRoomChatListIcon}
+          style={{ zIndex: "2", height: "30px", width: "30px" }}
+          onClick={() => showMobileMenu(true)}
+        />
+        <Container fluid className={style.wholeContainer}>
+          <Row className={style.wholeRow}>
+            <Col lg={3} md={3} className={`d-none d-md-block`}>
+              <div className="my-4 d-flex justify-content-between">
+                <h3 className={style.boldLogo}>Talkagram</h3>
+                <FontAwesomeIcon
+                  icon={faBars}
+                  className={style.showMenuIcon}
+                  onClick={() => handleShow()}
                 />
               </div>
-            )}
-            {displaySettings && (
-              <div className="my-3">
-                <Settings
-                  {...props}
-                  backToChat={backToChat}
-                  handleLogOut={handleLogOut}
-                  getUserData={getUserData}
-                />
-              </div>
-            )}
-            {displayContacts && (
-              <div className="my-3">
-                <Contacts
-                  {...props}
-                  backToChat={backToChat}
-                  userOnline={userOnline}
-                />
-              </div>
-            )}
-            {displayAddFriend && (
-              <div className="my-3">
-                <AddFriend
-                  {...props}
-                  backToChat={backToChat}
-                  listOfContacts={listOfContacts}
-                  listOfFriendRequests={listOfFriendRequests}
-                  listOfPendingRequests={listOfPendingRequests}
-                />
-              </div>
-            )}
-          </Col>
-          {!displayMobileMenu && hideMobileMenu ? (
+              {displayListRoom && (
+                <div className={`my-3`}>
+                  <ListRoom
+                    data={rooms}
+                    onlineList={userOnline}
+                    selectRoom={selectRoom}
+                  />
+                </div>
+              )}
+              {displaySettings && (
+                <div className="my-3">
+                  <Settings
+                    {...props}
+                    backToChat={backToChat}
+                    handleLogOut={handleLogOut}
+                    getUserData={getUserData}
+                  />
+                </div>
+              )}
+              {displayContacts && (
+                <div className="my-3">
+                  <Contacts
+                    {...props}
+                    backToChat={backToChat}
+                    userOnline={userOnline}
+                  />
+                </div>
+              )}
+              {displayAddFriend && (
+                <div className="my-3">
+                  <AddFriend
+                    {...props}
+                    backToChat={backToChat}
+                    listOfContacts={listOfContacts}
+                    listOfFriendRequests={listOfFriendRequests}
+                    listOfPendingRequests={listOfPendingRequests}
+                  />
+                </div>
+              )}
+            </Col>
             <Col
               lg={9}
               md={9}
@@ -886,26 +889,26 @@ function ChatList(props) {
                 ) : null;
               })}
             </Col>
-          ) : displayMobileMenu && !hideMobileMenu ? null : null}
-        </Row>
-        <Toast
-          className={style.notificationToast}
-          onClose={() => setNotif({ ...notif, show: false })}
-          show={notif.show}
-          delay={3000}
-          autohide
-        >
-          <Toast.Header closeButton={false}>
-            <img
-              src="holder.js/20x20?text=%20"
-              className="rounded me-1"
-              alt=""
-            />
-            <h6 className="fw-bold mx-auto">{notif.userName}</h6>
-          </Toast.Header>
-          <Toast.Body>{notif.chatMessage}</Toast.Body>
-        </Toast>
-      </Container>
+          </Row>
+          <Toast
+            className={style.notificationToast}
+            onClose={() => setNotif({ ...notif, show: false })}
+            show={notif.show}
+            delay={3000}
+            autohide
+          >
+            <Toast.Header closeButton={false}>
+              <img
+                src="holder.js/20x20?text=%20"
+                className="rounded me-1"
+                alt=""
+              />
+              <h6 className="fw-bold mx-auto">{notif.userName}</h6>
+            </Toast.Header>
+            <Toast.Body>{notif.chatMessage}</Toast.Body>
+          </Toast>
+        </Container>
+      </div>
     </>
   );
 }
