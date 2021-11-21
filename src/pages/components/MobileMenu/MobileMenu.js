@@ -7,17 +7,16 @@ import "animate.css";
 
 const dropIn = {
   hidden: {
-    x: "-100vh",
-    opacity: 0,
+    x: "-100vw", // Bisa dianggap sebagai jarak dari "tengah" viewport
+    opacity: 1,
+    transition: { duration: 1, type: "tween" },
   },
   visible: {
     x: "0",
     opacity: 1,
     transition: {
-      duration: 0.1,
-      type: "spring",
-      damping: 25,
-      stiffness: 500,
+      duration: 1,
+      type: "tween",
     },
   },
   exit: {
@@ -30,14 +29,10 @@ function MobileMenu({ show, close }) {
   return (
     <>
       <motion.div
-        // variants={dropIn}
-        // initial="hidden"
-        // animate={show ? "visible" : "hidden"}
-        style={
-          show
-            ? { display: "block", zIndex: "3" }
-            : { display: "none", zIndex: "3" }
-        }
+        variants={dropIn}
+        initial="hidden"
+        animate={show ? "visible" : "hidden"}
+        style={{ position: "relative", zIndex: "3" }}
       >
         <Container fluid className={style.background}>
           <div className="py-4 d-flex justify-content-between align-items-center">

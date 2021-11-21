@@ -11,24 +11,6 @@ body {
   position: absolute;
 }
 
-/* .modalTransitionEnter {
-  transform: translateX(-100%);
-}
-
-.modalTransitionEnterActive {
-  transition: 300ms;
-  transform: translateX(0);
-}
-
-.modalTransitionExit {
-  transform: translateX(0);
-}
-
-.modalTransitionExitActive {
-  transition: 300ms;
-  transform: translateX(-100%);
-} */
-
 .showMenuIcon {
   color: #7e98df;
   height: 33.594px;
