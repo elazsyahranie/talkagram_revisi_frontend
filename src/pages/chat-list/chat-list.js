@@ -61,6 +61,9 @@ function ChatList(props) {
   const [listOfPendingRequests, setListOfPendingRequests] = useState([]);
   const [listOfContacts, setListOfContacts] = useState([]);
 
+  // Show or Hide (Chat History)
+  const [showHideChatHistory, setShowHideChatHistory] = useState([]);
+
   // Modal
   const [showMenuModal, setShowMenuModal] = useState(false);
 
@@ -250,7 +253,8 @@ function ChatList(props) {
     console.log("Edit chat succesful!");
   };
 
-  const deleteChatHandle = () => {
+  const deleteChatHandle = (index) => {
+    setShowHideChatHistory([...showHideChatHistory, index]);
     console.log("Delete chat succesful!");
   };
   // CHAT MENU FUNCTION //
@@ -405,7 +409,9 @@ function ChatList(props) {
               {displayListRoom && (
                 <div className={`my-3`}>
                   <ListRoom
+                    auth={props.auth}
                     data={rooms}
+                    messages={messages}
                     onlineList={userOnline}
                     selectRoom={selectRoom}
                   />
@@ -545,7 +551,7 @@ function ChatList(props) {
                             <FontAwesomeIcon
                               icon={faTrashAlt}
                               title="Delete chat"
-                              onClick={() => deleteChatHandle()}
+                              onClick={() => deleteChatHandle(index)}
                             />
                           </span>
                         </span>
@@ -679,7 +685,7 @@ function ChatList(props) {
                             <FontAwesomeIcon
                               icon={faTrashAlt}
                               title="Delete chat"
-                              onClick={() => deleteChatHandle()}
+                              onClick={() => deleteChatHandle(index)}
                             />
                           </span>
                         </span>
