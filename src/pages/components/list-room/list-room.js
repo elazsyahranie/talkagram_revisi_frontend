@@ -12,30 +12,41 @@ function ListRoom(rooms) {
         ></Form.Control>
       </Form>
       {rooms.data.length > 0 ? (
-        rooms.data.map((item, index) => (
-          <div
-            className={`mb-3 d-flex ${style.overflowTextOuter}`}
-            key={index}
-            onClick={() =>
-              rooms.selectRoom(item.room_chat, item.user_id, item.user_name)
-            }
-            style={{
-              cursor: "pointer",
-            }}
-          >
-            <div>
-              <Image
-                src={noProfilePicture}
-                alt=""
-                className={style.profilePictureStyling}
-              />
+        rooms.data.map((item, index) => {
+          const filteredMessages = rooms.messages.filter(function (el) {
+            return el.room === item.room_chat;
+          });
+          return (
+            <div
+              className={`mb-3 d-flex ${style.overflowTextOuter}`}
+              key={index}
+              onClick={() =>
+                rooms.selectRoom(item.room_chat, item.user_id, item.user_name)
+              }
+              style={{
+                cursor: "pointer",
+              }}
+            >
+              <div>
+                <Image
+                  src={noProfilePicture}
+                  alt=""
+                  className={style.profilePictureStyling}
+                />
+              </div>
+              <div className={`ms-2 my-auto ${style.overflowTextParent}`}>
+                <h5 className={`mb-2`}>{item.user_name}</h5>
+                <h6 className={`mt-2`}>
+                  {filteredMessages.length === 0
+                    ? item.last_chat
+                    : filteredMessages.length > 0
+                    ? filteredMessages[filteredMessages.length - 1].message
+                    : null}
+                </h6>
+              </div>
             </div>
-            <div className={`ms-2 my-auto ${style.overflowTextParent}`}>
-              <h5 className={`mb-2`}>{item.user_name}</h5>
-              <h6 className={`mt-2`}>{item.last_chat}</h6>
-            </div>
-          </div>
-        ))
+          );
+        })
       ) : (
         <>
           <div>
