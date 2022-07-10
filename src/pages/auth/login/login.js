@@ -21,7 +21,6 @@ function Login(props) {
     props
       .loginUser({ ...form })
       .then((res) => {
-        console.log(res);
         localStorage.setItem("token", res.value.data.data.token);
         localStorage.setItem("refreshToken", res.value.data.data.refreshToken);
         props.history.push("/chat-list");

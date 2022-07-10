@@ -1,14 +1,23 @@
 import { Image, Form } from "react-bootstrap";
+import { useState } from "react";
 import style from "./list-room.module.css";
 import noProfilePicture from "../../components/img-not-found.png";
 
 function ListRoom(rooms) {
+
+  const handleSearchRoom = (event) => {
+    console.log(event.target.value);
+    // setRoomForm({[event.target.name]: event.target.value}); 
+  }
+
   return (
     <>
       <Form className="mb-3">
         <Form.Control
-          type="text"
+          type="text" 
+          name="roomForm"
           className={style.topFormControl}
+          onChange={(event) => handleSearchRoom(event)}
         ></Form.Control>
       </Form>
       {rooms.data.length > 0 ? (
