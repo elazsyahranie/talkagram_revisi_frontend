@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import style from "./chat-list.module.css";
 import {
   getRooms,
+  getRoomsByUserId,
   insertChat,
   chatHistory,
   getFriendRequest,
@@ -93,6 +94,7 @@ function ChatList(props) {
     }
     getContactsWithoutUser();
     getDataofRooms();
+    getDataofRoomsByUserId();
     getFriendRequestLists();
     getPendingRequestLists();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -180,6 +182,17 @@ function ChatList(props) {
       });
   };
 
+  const getDataofRoomsByUserId = () => {
+    props
+      .getRoomsByUserId(user_id)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   const getChatHistory = (room_chat) => {
     props
       .chatHistory(room_chat)
@@ -261,6 +274,7 @@ function ChatList(props) {
 
   const selectRoom = (room_chat, user_id, user_name) => {
     setMessageInput(true);
+    console.log([room_chat, user_id, user_name]);
     props.socket.emit("joinRoom", {
       room: room_chat,
       previousRoom: room.previous,
@@ -291,14 +305,14 @@ function ChatList(props) {
         chatMessage: message,
         show: true,
       };
-      // props
-      //   .insertChat(data)
-      //   .then((res) => {
-      //     console.log(res);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
+      props
+        .insertChat(data)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       // props.socket.emit("globalMessage", setData);
       // props.socket.emit("privateMessage", setData);
       // props.socket.emit("broadcastMessage", setData);
@@ -925,6 +939,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = {
   getRooms,
+  getRoomsByUserId,
   insertChat,
   chatHistory,
   getUserbyId,

@@ -1,5 +1,5 @@
 import { Image, Form } from "react-bootstrap";
-import { useState } from "react";
+// import { useState } from "react";
 import style from "./list-room.module.css";
 import noProfilePicture from "../../components/img-not-found.png";
 
@@ -9,6 +9,8 @@ function ListRoom(rooms) {
     console.log(event.target.value);
     // setRoomForm({[event.target.name]: event.target.value}); 
   }
+
+  console.log(rooms)
 
   return (
     <>
