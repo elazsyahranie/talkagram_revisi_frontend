@@ -48,6 +48,7 @@ function ChatList(props) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [rooms, setRooms] = useState([]);
+  const [listRooms, setListRooms] = useState([]);
   const [room, setRoom] = useState({ new: "", previous: "" });
   const [receiver, setReceiver] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
@@ -101,7 +102,6 @@ function ChatList(props) {
   }, [props.socket, messages, user_id]);
 
   const getUserData = () => {
-    // console.log("Testing the getUserData function");
     props
       .getUserbyId(userId)
       .then(() => {
@@ -120,8 +120,6 @@ function ChatList(props) {
       setUserOnline(listUsersOnline);
     });
     props.socket.on("notif-message", (data) => {
-      console.log("Test");
-      console.log(data);
       setNotif(data);
     });
   };
@@ -186,6 +184,7 @@ function ChatList(props) {
     props
       .getRoomsByUserId(user_id)
       .then((res) => {
+        setListRooms(res.value.data.data)
         console.log(res)
       })
       .catch((err) => {
@@ -425,6 +424,7 @@ function ChatList(props) {
                   <ListRoom
                     auth={props.auth}
                     data={rooms}
+                    listRooms={listRooms}
                     messages={messages}
                     onlineList={userOnline}
                     selectRoom={selectRoom}
